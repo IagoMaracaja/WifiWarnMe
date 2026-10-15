@@ -112,7 +112,7 @@ class _HomeState extends State<Home> {
       Card(child: SwitchListTile(
         title: const Text('Monitorar internet', style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: const Text('Alertas enquanto você usa o celular'),
-        value: enabled, activeColor: accent, onChanged: toggle,
+        value: enabled, activeThumbColor: accent, onChanged: toggle,
       )),
       const SizedBox(height: 12),
       Card(child: ListTile(leading: const Icon(Icons.network_check, color: accent),
