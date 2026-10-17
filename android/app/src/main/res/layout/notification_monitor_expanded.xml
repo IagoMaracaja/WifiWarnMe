@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Expanded monitor card, drawn after the mockup. The system header (icon, Linkzora, server and
+     countdown) and the action buttons are added by DecoratedCustomViewStyle. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/monitor_card"
+    android:orientation="vertical"
+    android:paddingStart="14dp"
+    android:paddingTop="14dp"
+    android:paddingEnd="14dp"
+    android:paddingBottom="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <FrameLayout
+            android:layout_width="62dp"
+            android:layout_height="62dp">
+            <ImageView
+                android:id="@+id/monitor_tile_fill"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="fitXY"
+                android:src="@drawable/monitor_tile_fill" />
+            <ImageView
+                android:id="@+id/monitor_tile_stroke"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="fitXY"
+                android:src="@drawable/monitor_tile_stroke" />
+            <ImageView
+                android:id="@+id/monitor_icon"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_monitor_wifi" />
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/monitor_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="@color/card_text"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/monitor_dot"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/monitor_circle" />
+                <TextView
+                    android:id="@+id/monitor_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/monitor_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/card_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/monitor_panel"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="9dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <FrameLayout
+                android:layout_width="34dp"
+                android:layout_height="34dp">
+                <ImageView
+                    android:id="@+id/ping_badge"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/monitor_circle" />
+                <ImageView
+                    android:id="@+id/ping_icon"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_metric_ping" />
+            </FrameLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/ping_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/card_ping"
+                    android:textColor="@color/card_secondary"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/ping_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="12dp"
+            android:background="@color/card_divider"
+            android:importantForAccessibility="no" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <FrameLayout
+                android:layout_width="34dp"
+                android:layout_height="34dp">
+                <ImageView
+                    android:id="@+id/jitter_badge"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/monitor_circle" />
+                <ImageView
+                    android:id="@+id/jitter_icon"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_metric_jitter" />
+            </FrameLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/jitter_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/card_jitter"
+                    android:textColor="@color/card_secondary"
+                    android:textSize="12sp" />
+                <TextView
+                    android:id="@+id/jitter_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Ribbon of the recent checks of the current server (see monitor_ribbon.xml). -->
+    <include
+        layout="@layout/monitor_ribbon"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/loss_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_monitor_wifi" />
+        <TextView
+            android:id="@+id/loss_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:includeFontPadding="false"
+            android:text="@string/card_loss"
+            android:textColor="@color/card_secondary"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/loss_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:background="@color/card_divider"
+            android:importantForAccessibility="no" />
+        <ImageView
+            android:id="@+id/clock_icon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_metric_clock" />
+        <!-- Weighted so the time is never cut; the label ellipsizes instead on narrow cards. -->
+        <TextView
+            android:id="@+id/last_check_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@string/card_last_check"
+            android:textColor="@color/card_secondary"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/last_check_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="4dp"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="@color/card_text"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

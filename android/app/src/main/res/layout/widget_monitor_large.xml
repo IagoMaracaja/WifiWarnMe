@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Large home screen widget, compact variant (4x2): tile, network name, state and cause, refresh
+     button (or "Abrir app" while paused), the ribbon of recent checks, ping, jitter and last check.
+     widget_monitor_large_tall.xml is the full card used when the widget is resized taller.
+     Texts and colours are set by MonitorWidgets; the defaults below only show until the first update. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/background"
+    style="@style/LinkzoraWidgetRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingStart="14dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp">
+            <ImageView
+                android:id="@+id/monitor_tile_fill"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="fitXY"
+                android:src="@drawable/monitor_tile_fill_small" />
+            <ImageView
+                android:id="@+id/monitor_tile_stroke"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:importantForAccessibility="no"
+                android:scaleType="fitXY"
+                android:src="@drawable/monitor_tile_stroke_small" />
+            <ImageView
+                android:id="@+id/monitor_icon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:importantForAccessibility="no"
+                android:src="@drawable/ic_monitor_wifi" />
+        </FrameLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="11dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/monitor_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="Linkzora"
+                android:textColor="@color/card_text"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/monitor_dot"
+                    android:layout_width="7dp"
+                    android:layout_height="7dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/monitor_circle" />
+                <TextView
+                    android:id="@+id/monitor_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textColor="@color/card_text"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/monitor_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textColor="@color/card_secondary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+        <include layout="@layout/widget_actions" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/monitor_ribbon"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:layout_marginTop="7dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/ping_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@string/card_ping"
+            android:textColor="@color/card_secondary"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/ping_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="—"
+            android:textColor="@color/card_text"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="12dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/card_divider"
+            android:importantForAccessibility="no" />
+        <TextView
+            android:id="@+id/jitter_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@string/card_jitter"
+            android:textColor="@color/card_secondary"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/jitter_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="—"
+            android:textColor="@color/card_text"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+        <!-- Weighted so the time is never cut; the label ellipsizes instead on narrow widgets. -->
+        <TextView
+            android:id="@+id/last_check_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="@string/card_last_check"
+            android:textColor="@color/card_secondary"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/last_check_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:text="—"
+            android:textColor="@color/card_text"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

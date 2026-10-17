@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Shared by the notification card and the widgets (included with its own top margin).
+     Ribbon: one continuous bar made of the recent checks of the current server, oldest on the
+     left. Segments are flat and have no gaps, so consecutive checks with the same state read as
+     one solid block; only the two outer ends are rounded. The glow behind takes the latest state. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="18dp">
+    <ImageView
+        android:id="@+id/ribbon_glow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY"
+        android:src="@drawable/monitor_glow" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/ribbon_0"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_start" />
+        <ImageView
+            android:id="@+id/ribbon_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_4"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_6"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_7"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_8"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_9"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_10"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_middle" />
+        <ImageView
+            android:id="@+id/ribbon_11"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/monitor_ribbon_end" />
+    </LinearLayout>
+</FrameLayout>

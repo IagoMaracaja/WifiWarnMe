@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Root of the home screen widgets. Android 12+ clips the content to the rounded card (values-v31). -->
+    <style name="LinkzoraWidgetRoot">
+        <item name="android:background">@drawable/widget_card</item>
+    </style>
+</resources>

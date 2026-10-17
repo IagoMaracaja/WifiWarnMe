@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Top-right action of the large widget: refresh while monitoring runs, "Abrir app" while paused.
+     MonitorWidgets shows one of them. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp">
+    <ImageView
+        android:id="@+id/widget_refresh"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="@drawable/widget_button"
+        android:contentDescription="@string/action_check_now"
+        android:padding="9dp"
+        android:src="@drawable/ic_action_refresh"
+        android:tint="@color/card_text" />
+    <TextView
+        android:id="@+id/widget_open"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:background="@drawable/widget_pill"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="@string/widget_open_app"
+        android:textColor="@color/card_text"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+</FrameLayout>

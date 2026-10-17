@@ -1,5 +1,5 @@
 name: wifiwarnme
-description: Monitor de conectividade com alertas Android
+description: Linkzora, monitor de conectividade com alertas Android
 publish_to: none
 version: 0.1.0+1
 environment:
@@ -7,6 +7,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: 0.20.2
   shared_preferences: ^2.3.2
+  fl_chart: 1.1.1
+  simple_icons: 16.23.0
+  country_flags: 4.1.2
+  url_launcher: 6.3.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  url_launcher_platform_interface: 2.3.2
+  plugin_platform_interface: 2.1.8
 flutter:
   uses-material-design: true
+  generate: true
+  assets:
+    - assets/brand/linkzora_icon.png

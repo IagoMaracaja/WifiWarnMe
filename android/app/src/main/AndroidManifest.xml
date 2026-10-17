@@ -1,21 +1,50 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!-- Rede tab: Wi-Fi scan (startScan) and SSDP/mDNS multicast discovery. -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <application android:label="WifiWarnMe" android:name="${applicationName}">
+    <uses-permission android:name="android.permission.POST_PROMOTED_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <application android:label="Linkzora" android:name="${applicationName}" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round">
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
             <meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@android:style/Theme.Material.Light.NoActionBar"/>
             <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
         </activity>
-        <service android:name=".MonitorService" android:exported="false" android:foregroundServiceType="specialUse">
+        <service android:name=".MonitorService" android:exported="false" android:foregroundServiceType="specialUse|location">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="User-initiated continuous internet connectivity monitoring with persistent status notification"/>
         </service>
+        <!-- Home screen widgets (MonitorWidgets.kt). -->
+        <receiver android:name=".BootReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".LinkzoraSmallWidget" android:exported="false" android:label="@string/widget_small_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_monitor_small_info"/>
+        </receiver>
+        <receiver android:name=".LinkzoraLargeWidget" android:exported="false" android:label="@string/widget_large_name">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE"/></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_monitor_large_info"/>
+        </receiver>
         <meta-data android:name="flutterEmbedding" android:value="2"/>
     </application>
-    <queries><intent><action android:name="android.intent.action.PROCESS_TEXT"/><data android:mimeType="text/plain"/></intent></queries>
+    <queries>
+        <intent><action android:name="android.intent.action.PROCESS_TEXT"/><data android:mimeType="text/plain"/></intent>
+        <!-- url_launcher: the donation link opens in the browser (Android 11+ package visibility). -->
+        <intent><action android:name="android.intent.action.VIEW"/><data android:scheme="https"/></intent>
+    </queries>
 </manifest>
