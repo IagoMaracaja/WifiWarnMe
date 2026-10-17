@@ -1,4 +1,4 @@
-package com.wifiwarnme.app
+package com.linkzora.app
 
 import java.io.ByteArrayOutputStream
 import org.junit.Assert.assertArrayEquals

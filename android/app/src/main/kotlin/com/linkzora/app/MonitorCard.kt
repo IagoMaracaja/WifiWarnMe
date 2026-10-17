@@ -1,4 +1,4 @@
-package com.wifiwarnme.app
+package com.linkzora.app
 
 /**
  * Texts, colours and the state ribbon of the persistent monitor card, without Android types so

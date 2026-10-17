@@ -1,4 +1,4 @@
-package com.wifiwarnme.app
+package com.linkzora.app
 
 import java.io.File
 import org.json.JSONArray

@@ -13,7 +13,7 @@ flutter pub get
 flutter run
 ```
 
-Para rodar os testes, execute `flutter test` e, em `android/`, `./gradlew :app:testDebugUnitTest`. Para gerar um APK de depuração, execute `flutter build apk --debug`. O arquivo será criado em `build/app/outputs/flutter-apk/app-debug.apk`. O `applicationId` e o `namespace` são `com.wifiwarnme.app`.
+Para rodar os testes, execute `flutter test` e, em `android/`, `./gradlew :app:testDebugUnitTest`. Para gerar um APK de depuração, execute `flutter build apk --debug`. O arquivo será criado em `build/app/outputs/flutter-apk/app-debug.apk`. O `applicationId` e o `namespace` são `com.linkzora.app`.
 
 ## Servidores de teste
 

@@ -1,4 +1,4 @@
-package com.wifiwarnme.app
+package com.linkzora.app
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

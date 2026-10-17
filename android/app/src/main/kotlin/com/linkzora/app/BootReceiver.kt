@@ -1,4 +1,4 @@
-package com.wifiwarnme.app
+package com.linkzora.app
 
 import android.content.BroadcastReceiver
 import android.content.Context
