@@ -53,7 +53,8 @@ private data class WifiDetails(
     val name: String,
     val signalLevel: Int = -1,
     val rssi: Int = 0,
-    val linkSpeed: Int = 0
+    val linkSpeed: Int = 0,
+    val frequencyMhz: Int = 0
 )
 
 /** Everything one check produced, used for the status notification and alerts. */
@@ -65,7 +66,11 @@ private data class CheckReport(
     val result: LatencyResult,
     val diagnosis: DiagnosisCode,
     val signalLevel: Int,
-    val checkedAt: Long
+    val checkedAt: Long,
+    val rssi: Int = 0,
+    val frequencyMhz: Int = 0,
+    /** Android validated internet access on this network. */
+    val validated: Boolean = true
 )
 
 class MonitorService : Service() {
@@ -75,6 +80,8 @@ class MonitorService : Service() {
         const val PAUSE = "linkzora.PAUSE"
         /** Re-renders the notification (and channel names) after the app language changed. */
         const val REFRESH = "linkzora.REFRESH"
+        /** Sent when the app opens: renews the foreground service with the location type. */
+        const val FOREGROUND = "linkzora.FOREGROUND"
         private const val TICK = "linkzora.TICK"
         @Volatile
         var active = false
@@ -334,6 +341,14 @@ class MonitorService : Service() {
                 stopSelf()
                 return START_NOT_STICKY
             }
+            FOREGROUND -> {
+                if (!running) {
+                    stopSelf()
+                    return START_NOT_STICKY
+                }
+                enterForeground(statusNotification(lastReport))
+                return START_STICKY
+            }
             REFRESH -> {
                 if (!running) {
                     stopSelf()
@@ -369,7 +384,19 @@ class MonitorService : Service() {
             .putString("locationId", locationId)
             .putString("notificationMode", notificationMode)
             .apply()
-        val initial = statusNotification(null)
+        enterForeground(statusNotification(null))
+        handler.removeCallbacks(tick)
+        handler.post(tick)
+        MonitorWidgets.update(this)
+        return START_STICKY
+    }
+
+    /**
+     * Starts (or renews) the foreground service, with the location type when allowed so Android
+     * reveals the Wi-Fi name. Android 14+ refuses that type when the service starts in the
+     * background (boot, update, sticky restart); it is then renewed when the app opens.
+     */
+    private fun enterForeground(notification: Notification) {
         if (Build.VERSION.SDK_INT >= 29) {
             var types = if (Build.VERSION.SDK_INT >= 34) ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE else 0
             if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -377,20 +404,16 @@ class MonitorService : Service() {
                 types = types or ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
             }
             try {
-                startForeground(ID, initial, types)
+                startForeground(ID, notification, types)
             } catch (e: RuntimeException) {
                 // Android 14+ refuses the location type when the service is (re)started from the
                 // background with "while in use" permission; monitoring still works without it.
                 if (types and ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION == 0) throw e
-                startForeground(ID, initial, types and ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION.inv())
+                startForeground(ID, notification, types and ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION.inv())
             }
         } else {
-            startForeground(ID, initial)
+            startForeground(ID, notification)
         }
-        handler.removeCallbacks(tick)
-        handler.post(tick)
-        MonitorWidgets.update(this)
-        return START_STICKY
     }
 
     /** New language: channel names, the persistent notification and the widgets follow at once. */
@@ -458,50 +481,67 @@ class MonitorService : Service() {
 
     private fun currentTargetName(): String = targetName(serverId, locationId)
 
-    /** Recent (server, state) pairs for the notification ribbon, loaded once from the store. */
-    private var ribbonHistory: MutableList<RibbonEntry>? = null
+    /** Recent checks (server, state, latency, time) for the chart, loaded once from the store. */
+    private var chartHistory: MutableList<HistoryEntry>? = null
 
-    private fun ribbonHistory(): MutableList<RibbonEntry> = ribbonHistory ?: store(this).read()
-        .map { RibbonEntry(it.optString("targetName", ""), it.optString("state", "offline")) }
+    private fun chartHistory(): MutableList<HistoryEntry> = chartHistory ?: store(this).read()
+        .map {
+            HistoryEntry(it.optString("targetName", ""), it.optString("state", "offline"),
+                it.optLong("latency", -1L), it.optLong("timestamp"))
+        }
         .takeLast(RIBBON_HISTORY)
         .toMutableList()
-        .also { ribbonHistory = it }
+        .also { chartHistory = it }
 
-    private fun rememberForRibbon(report: CheckReport) {
-        val history = ribbonHistory()
-        history.add(RibbonEntry(report.targetName, report.state))
+    private fun rememberForChart(report: CheckReport) {
+        val history = chartHistory()
+        history.add(HistoryEntry(report.targetName, report.state, report.result.latency, report.checkedAt))
         while (history.size > RIBBON_HISTORY) history.removeAt(0)
     }
 
-    /** Builds the card shown below API 36; before the first result it shows "Verificando…". */
-    private fun monitorCard(report: CheckReport?): MonitorCard {
+    /** When the current drop or instability began (0 while online), for "sem resposta há 16 min". */
+    private var problemStartedAt = 0L
+
+    /** The redesigned card; before the first result it shows "Verificando". */
+    private fun notificationCard(report: CheckReport?): NotificationCard {
         val prefs = getSharedPreferences(PREFS, MODE_PRIVATE)
         val targetName = report?.targetName ?: currentTargetName()
-        return MonitorCardFormat.card(
+        val now = System.currentTimeMillis()
+        val result = report?.result
+        return NotificationFormat.card(NotificationInput(
             state = report?.state ?: "checking",
             transportType = report?.transportType ?: (prefs.getString("transportType", "none") ?: "none"),
             networkName = report?.networkName ?: prefs.getString("networkName", null),
+            frequencyMhz = report?.frequencyMhz ?: 0,
+            signalLevel = report?.signalLevel ?: prefs.getInt("signalLevel", -1),
+            rssi = report?.rssi ?: prefs.getInt("wifiRssi", 0),
+            validated = report?.validated ?: true,
+            latency = result?.latency ?: -1,
+            jitter = result?.jitter ?: -1,
+            failureRate = result?.failureRate ?: 0,
+            successfulSamples = result?.successfulSamples ?: 0,
+            totalSamples = result?.totalSamples ?: 5,
+            maxLatency = maxLatency,
             diagnosis = report?.let { NativeText.cardDiagnosis(this, it.diagnosis, NativeText.targetLabel(this, it.targetName)) },
-            latency = report?.result?.latency,
-            jitter = report?.result?.jitter,
-            failureRate = report?.result?.failureRate,
-            lastCheck = report?.let { clock(it.checkedAt) }
-                ?: prefs.getLong("lastCheckedAt", 0L).takeIf { it > 0 }?.let(::clock) ?: "—",
-            ribbon = MonitorCardFormat.ribbon(ribbonHistory(), targetName),
-            texts = NativeText.cardTexts(this)
-        )
+            problemFor = if (problemStartedAt > 0 && report != null) report.checkedAt - problemStartedAt else 0,
+            measuredAt = report?.let { clock(it.checkedAt) } ?: MonitorCardFormat.NO_VALUE,
+            history = chartHistory().filter { it.targetName == targetName },
+            now = now
+        ), NativeText.notificationTexts(this))
     }
 
     /**
-     * The persistent notification. Below API 36 it is the custom dark card from the design
-     * mockup (see [MonitorNotificationViews]). From API 36 on it keeps the standard template,
-     * because Android 16 only promotes notifications without custom views to Live Updates
-     * (status bar chip, lock screen and AOD).
+     * The persistent notification, after design/notificacao/notificacao-redesign.png. Below
+     * API 36 it is the custom card (see [MonitorNotificationViews]). From API 36 on it is the
+     * system template with ProgressStyle: Android 16 only promotes notifications without custom
+     * views to Live Updates (status bar chip, lock screen and AOD), and ProgressStyle still shows
+     * the last checks as coloured segments.
      */
     private fun statusNotification(report: CheckReport?): Notification {
         val state = report?.state ?: "checking"
         val nextCheckAt = getSharedPreferences(PREFS, MODE_PRIVATE).getLong("nextCheckAt", 0L)
         val custom = MonitorNotificationViews.supported()
+        val card = notificationCard(report)
         val builder = NotificationCompat.Builder(this, CHANNEL)
             .setSmallIcon(R.drawable.ic_linkzora_notification)
             .setColor(stateColor(state))
@@ -512,87 +552,92 @@ class MonitorService : Service() {
             .setContentIntent(openApp(0))
             .setOngoing(true)
             .setOnlyAlertOnce(true)
+            // Header: "Linkzora · <server> · <time of the check>".
+            .setSubText(NativeText.targetLabel(this, report?.targetName ?: currentTargetName()))
+            // Plain texts also feed accessibility, wearables and redacted lock screens.
+            .setContentTitle(headline(state, report?.result))
+            .setContentText(if (report == null) str(R.string.notification_first_check) else card.diagnosis)
 
-        if (custom) {
-            val card = monitorCard(report)
-            // Never a large icon here, including the first "Verificando…" card posted by
-            // onStartCommand: Android 12+ draws it to the right of decorated custom views and
-            // squeezes the card. Cleared explicitly so no builder default can bring it back.
-            builder
-                .setLargeIcon(null as android.graphics.Bitmap?)
-                // The system header shows "Linkzora · <server> · countdown" above the card.
-                .setSubText(NativeText.targetLabel(this, report?.targetName ?: currentTargetName()))
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-                .setCustomContentView(MonitorNotificationViews.collapsed(this, card))
-                .setCustomBigContentView(MonitorNotificationViews.expanded(this, card))
-                // Plain texts still feed accessibility, wearables and redacted lock screens.
-                .setContentTitle(headline(state, report?.result))
-                .setContentText("${card.networkName} · ${card.stateSubtitle}")
-        } else {
-            // Android 16 Live Update: shown on the lock screen, AOD and as a status bar chip. The
-            // standard template keeps the brand icon; the custom card above never sets one.
-            builder.setLargeIcon(brandIcon).setRequestPromotedOngoing(true)
-        }
-
-        if (report == null) {
-            if (!custom) {
-                builder
-                    .setContentTitle(headline(state, null))
-                    .setContentText(str(R.string.notification_first_check))
-                    .setProgress(0, 0, true)
-                    .setShortCriticalText("…")
-            }
-            return builder.setShowWhen(false).build()
-        }
-
-        val result = report.result
-        if (!custom) {
-            val transport = transportLabel(report.transportType)
-            val target = NativeText.targetLabel(this, report.targetName)
-            val network = if (report.transportType == "wifi" && report.networkName != MonitorCardFormat.WIFI) {
-                report.networkName
-            } else {
-                transport
-            }
-            val metrics = if (result.successfulSamples == 0) {
-                str(R.string.notification_no_response, result.totalSamples)
-            } else {
-                str(R.string.notification_metrics, result.latency, result.jitter, result.failureRate)
-            }
-            val expanded = SpannableStringBuilder()
-                .detailLine(str(R.string.label_measurement), metrics)
-                .detailLine(str(R.string.label_network), listOfNotNull(
-                    network.takeIf { it != transport }, transport,
-                    signalLabel(report.signalLevel).takeIf { report.transportType == "wifi" }
-                ).joinToString(" · "))
-                .detailLine(str(R.string.label_server), str(R.string.notification_server_at, target, clock(report.checkedAt)))
-                .detailLine(str(R.string.label_diagnosis), diagnosisText(report))
-            builder
-                .setContentTitle(headline(state, result))
-                .setContentText("$network · $target")
-                .setStyle(NotificationCompat.BigTextStyle()
-                    .setBigContentTitle(headline(state, result))
-                    .bigText(expanded))
-                .setShortCriticalText(if (state == "offline") "Off" else "${result.latency} ms")
-        }
-        builder
-            .addAction(R.drawable.ic_action_refresh, str(R.string.action_check_now), serviceAction(CHECK_NOW, 2))
-            .addAction(R.drawable.ic_action_pause, str(R.string.action_pause), serviceAction(PAUSE, 3))
-
-        // Header countdown to the next check while monitoring continuously.
-        if (!stopAfterCheck && nextCheckAt > System.currentTimeMillis()) {
-            builder.setWhen(nextCheckAt).setShowWhen(true)
-                .setUsesChronometer(true).setChronometerCountDown(true)
+        if (report != null) {
+            builder.setWhen(report.checkedAt).setShowWhen(true)
         } else {
             builder.setShowWhen(false)
         }
+
+        if (custom) {
+            // Never a large icon here: Android 12+ draws it to the right of decorated custom views
+            // and squeezes the card. Cleared explicitly so no builder default can bring it back.
+            builder
+                .setLargeIcon(null as android.graphics.Bitmap?)
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(MonitorNotificationViews.redesignedCollapsed(this, card))
+                .setCustomBigContentView(MonitorNotificationViews.redesignedExpanded(this, card, maxLatency,
+                    if (stopAfterCheck) 0L else nextCheckAt))
+        } else {
+            // No large icon: the design keeps the whole width for the text and the segments.
+            builder
+                .setRequestPromotedOngoing(true)
+                .setShortCriticalText(when {
+                    report == null -> "…"
+                    state == "offline" -> "Off"
+                    else -> "${report.result.latency} ms"
+                })
+                .setStyle(progressStyle(card))
+            if (report != null) {
+                val result = report.result
+                val details = listOfNotNull(
+                    if (result.successfulSamples > 0) str(R.string.notif_live_details, result.jitter, result.failureRate) else null,
+                    if (report.transportType == "wifi") {
+                        listOfNotNull(MonitorCardFormat.WIFI, signalLabel(report.signalLevel)).joinToString(" ")
+                    } else transportLabel(report.transportType)
+                ).joinToString(" · ")
+                builder.setStyle(progressStyle(card))
+                    .setContentText("${card.diagnosis.removeSuffix(".")}\n$details")
+            }
+        }
+
+        if (report != null) {
+            builder
+                .addAction(R.drawable.ic_action_refresh, str(R.string.action_check_now), serviceAction(CHECK_NOW, 2))
+                .addAction(R.drawable.ic_action_pause, str(R.string.action_pause), serviceAction(PAUSE, 3))
+        }
         return builder.build()
+    }
+
+    /**
+     * Android 16: one segment per recent check in the state colour, the ring as tracker icon at
+     * the end. Before the first result it is indeterminate.
+     */
+    private fun progressStyle(card: NotificationCard): NotificationCompat.ProgressStyle {
+        val style = NotificationCompat.ProgressStyle()
+            .setStyledByProgress(false)
+            .setProgressTrackerIcon(androidx.core.graphics.drawable.IconCompat.createWithResource(this, R.drawable.ic_tracker_ring))
+        if (card.state == "checking") return style.setProgressIndeterminate(true)
+        card.bars.forEach { bar ->
+            style.addProgressSegment(NotificationCompat.ProgressStyle.Segment(1).setColor(MonitorCardFormat.stateColor(bar.state)))
+        }
+        return style.setProgress(card.bars.size)
     }
 
     // getConnectionInfo remains available on older devices and returns the primary Wi-Fi SSID.
     // Never reuse a saved SSID: permission revocation or a network change must not show an old name.
     @Suppress("DEPRECATION")
-    private fun wifiDetails(): WifiDetails {
+    private fun wifiDetails(network: Network?): WifiDetails {
+        val details = readWifi()
+        // Android hides the SSID from a service started in the background (boot, update). The
+        // last name is reused only for the very same network (same Android network id), so a
+        // different network never shows an old name.
+        val prefs = getSharedPreferences(PREFS, MODE_PRIVATE)
+        val id = network?.toString()
+        if (details.name != "Wi-Fi") {
+            prefs.edit().putString("ssidNetwork", id).putString("ssidName", details.name).apply()
+            return details
+        }
+        val known = prefs.getString("ssidName", null)
+        return if (id != null && id == prefs.getString("ssidNetwork", null) && known != null) details.copy(name = known) else details
+    }
+
+    private fun readWifi(): WifiDetails {
         if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) return WifiDetails("Wi-Fi")
         return try {
             val info = applicationContext.getSystemService(WifiManager::class.java).connectionInfo
@@ -602,7 +647,7 @@ class MonitorService : Service() {
             }
             val rssi = info?.rssi ?: 0
             val level = if (rssi != 0) WifiManager.calculateSignalLevel(rssi, 5) else -1
-            WifiDetails(name ?: "Wi-Fi", level, rssi, info?.linkSpeed ?: 0)
+            WifiDetails(name ?: "Wi-Fi", level, rssi, info?.linkSpeed ?: 0, info?.frequency ?: 0)
         } catch (_: SecurityException) {
             WifiDetails("Wi-Fi")
         }
@@ -643,7 +688,7 @@ class MonitorService : Service() {
             .apply()
         val network = cm.activeNetwork
         val caps = network?.let { cm.getNetworkCapabilities(it) }
-        val wifi = if (caps?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true) wifiDetails() else WifiDetails("Wi-Fi")
+        val wifi = if (caps?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true) wifiDetails(network) else WifiDetails("Wi-Fi")
         val (transportType, networkName) = when {
             caps?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> "wifi" to wifi.name
             caps?.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) == true -> "cellular" to str(R.string.transport_cellular)
@@ -701,7 +746,7 @@ class MonitorService : Service() {
             handler.post {
                 if (!running || currentGeneration != generation) return@post
                 val report = CheckReport(state, networkName, transportType, targetName, result,
-                    diagnosis, wifi.signalLevel, System.currentTimeMillis())
+                    diagnosis, wifi.signalLevel, System.currentTimeMillis(), wifi.rssi, wifi.frequencyMhz, validated)
                 publish(report, transport)
                 // Gateway reference and the 15-min device inventory for the Rede tab.
                 NetworkScanner.afterCheck(applicationContext, report.transportType)
@@ -737,7 +782,12 @@ class MonitorService : Service() {
             .putBoolean("checking", false)
             .apply()
         appendMeasurement(report)
-        rememberForRibbon(report)
+        rememberForChart(report)
+        problemStartedAt = when {
+            report.state == "online" -> 0L
+            problemStartedAt == 0L -> report.checkedAt
+            else -> problemStartedAt
+        }
         // Before lastCheckedAt, so the history the UI fetches for this check already has the event.
         // The last logged state is persisted: the service restarts on every app launch (one-shot
         // probe) and on updates, and an in-memory value would log the same state again each time.

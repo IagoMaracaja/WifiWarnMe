@@ -21,6 +21,7 @@
             android:layout_height="40dp">
             <ImageView
                 android:id="@+id/monitor_tile_fill"
+            android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
@@ -30,6 +31,7 @@
                 android:tint="#20E3A2" />
             <ImageView
                 android:id="@+id/monitor_tile_stroke"
+            android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
@@ -39,12 +41,19 @@
                 android:tint="#20E3A2" />
             <ImageView
                 android:id="@+id/monitor_icon"
+            android:visibility="gone"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_monitor_wifi"
                 android:tint="#20E3A2" />
+            <ImageView
+            android:id="@+id/widget_brand"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Linkzora"
+            android:src="@mipmap/ic_launcher_round" />
         </FrameLayout>
         <LinearLayout
             android:layout_width="0dp"

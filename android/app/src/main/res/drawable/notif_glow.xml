@@ -1,0 +1,5 @@
+<!-- Soft radial light in the top-left corner of the panel, tinted with the state colour. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient android:type="radial" android:gradientRadius="160dp" android:centerX="0" android:centerY="0"
+        android:startColor="#FFFFFFFF" android:endColor="#00FFFFFF"/>
+</shape>

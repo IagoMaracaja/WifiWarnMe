@@ -61,6 +61,7 @@ object MonitorCardFormat {
     const val JITTER = 0xFF28B8F0.toInt()
     const val EMPTY_SEGMENT = 0xFF263646.toInt()
     const val SECONDARY = 0xFF97A8B8.toInt()
+    const val TEXT = 0xFFE8F0F7.toInt()
 
     fun stateColor(state: String): Int = when (state) {
         "online" -> ONLINE

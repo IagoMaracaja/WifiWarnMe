@@ -75,6 +75,31 @@ object NativeText {
         )
     }
 
+    fun notificationTexts(context: Context): NotificationTexts {
+        val c = NativeLocale.localized(context)
+        return NotificationTexts(
+            pillOnline = c.getString(R.string.notif_pill_online),
+            pillSlow = c.getString(R.string.notif_pill_slow),
+            pillOffline = c.getString(R.string.notif_pill_offline),
+            pillChecking = c.getString(R.string.notif_pill_checking),
+            latencyCaption = c.getString(R.string.notif_latency_caption),
+            noResponseCaption = c.getString(R.string.notif_no_response_caption),
+            band = c.getString(R.string.notif_band),
+            signalWeak = c.getString(R.string.signal_weak),
+            signalFair = c.getString(R.string.signal_fair),
+            signalGood = c.getString(R.string.signal_good),
+            connectedNoInternet = c.getString(R.string.notif_connected_no_internet),
+            cellular = c.getString(R.string.transport_cellular),
+            ethernet = c.getString(R.string.transport_ethernet),
+            noConnection = c.getString(R.string.network_none),
+            stableWindow = c.getString(R.string.notif_stable_window),
+            stable = c.getString(R.string.notif_stable),
+            problemSince = c.getString(R.string.notif_problem_since),
+            firstCheck = c.getString(R.string.notification_first_check),
+            axisStart = c.getString(R.string.notif_axis_start)
+        )
+    }
+
     fun diagnosis(context: Context, code: DiagnosisCode, targetLabel: String): String {
         val c = NativeLocale.localized(context)
         return when (code) {

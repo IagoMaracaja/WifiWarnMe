@@ -1,0 +1,188 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+:root{--card:#0E1A26;--panel:#122230;--line:rgba(255,255,255,.07);--tx:#E8F0F7;--mu:#8A9FB4;--g:#20E3A2;--y:#FFC857;--r:#FF6B78;--b:#28B8F0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1480px;font-family:Inter,sans-serif;color:var(--tx);background:#05090F;padding:56px 56px 64px}
+h1{font-family:"Inter Display";font-size:40px;letter-spacing:-1.2px;font-weight:700}
+h1 span{background:linear-gradient(90deg,#20E3A2,#28B8F0);-webkit-background-clip:text;color:transparent}
+.lead{color:#8A9FB4;font-size:15px;margin:8px 0 34px}
+.sec{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#7F95AB;margin:0 0 14px 4px}
+.stage{border-radius:28px;padding:28px;background:
+ radial-gradient(600px 300px at 15% 110%,rgba(214,120,30,.55),transparent 70%),
+ radial-gradient(500px 260px at 95% 105%,rgba(214,120,30,.35),transparent 70%),
+ linear-gradient(180deg,#1a1d22,#0c0e12);}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+/* ---------- custom card ---------- */
+.card{background:linear-gradient(180deg,#101E2B,#0E1A26);border-radius:26px;padding:12px 12px 6px;box-shadow:0 20px 50px rgba(0,0,0,.5),inset 0 0 0 1px var(--line)}
+.hd{display:flex;align-items:center;gap:8px;padding:2px 6px 10px;font-size:12.5px;color:var(--mu)}
+.hd b{color:var(--tx);font-weight:600}
+.hd svg{width:18px;height:18px}
+.hd .chev{margin-left:auto;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.07);display:grid;place-items:center}
+.body{position:relative;border-radius:20px;background:var(--panel);padding:14px 14px 12px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.body:before{content:"";position:absolute;inset:0;background:radial-gradient(260px 140px at 0% 0%,var(--sc-a),transparent 70%);pointer-events:none}
+.body:after{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:0 3px 3px 0;background:var(--sc)}
+.r1{display:flex;align-items:center;gap:10px;position:relative}
+.chip{width:34px;height:34px;border-radius:11px;background:var(--sc-b);display:grid;place-items:center;flex:none}
+.chip svg{width:19px;height:19px}
+.nm{font-weight:700;font-size:15px;letter-spacing:-.2px}
+.nm small{display:block;font-weight:500;font-size:11.5px;color:var(--mu);margin-top:1px}
+.pill{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--sc);background:var(--sc-b);padding:5px 10px 5px 8px;border-radius:99px}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--sc);box-shadow:0 0 0 3px var(--sc-a)}
+.r2{display:flex;align-items:flex-end;gap:12px;margin-top:14px;position:relative}
+.big{font-family:"Inter Display";font-weight:700;font-size:46px;letter-spacing:-2px;line-height:.9;color:var(--tx);font-variant-numeric:tabular-nums}
+.big em{font-style:normal;font-size:17px;letter-spacing:0;color:var(--sc);margin-left:3px;font-weight:600}
+.cap{font-size:10.5px;color:var(--mu);margin-top:6px}
+.chart{margin-left:auto;text-align:right}
+.chart svg{display:block}
+.ax{display:flex;justify-content:space-between;font-size:9.5px;color:#61778D;margin-top:3px}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:13px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);position:relative}
+.m{padding:9px 0 9px 2px}
+.m+.m{border-left:1px solid var(--line);padding-left:12px}
+.m span{display:block;font-size:10.5px;color:var(--mu);margin-bottom:2px}
+.m b{font-size:15px;font-variant-numeric:tabular-nums}
+.dx{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12px;color:#C9D6E2;position:relative}
+.dx svg{width:15px;height:15px;flex:none}
+.ft{display:flex;justify-content:space-between;font-size:11px;color:var(--mu);padding:9px 8px 2px}
+.ft b{color:var(--tx);font-weight:600}
+.act{display:flex;gap:22px;padding:6px 8px 6px;font-size:13px;font-weight:600;color:var(--g)}
+.ok{--sc:#20E3A2;--sc-a:rgba(32,227,162,.16);--sc-b:rgba(32,227,162,.12)}
+.warn{--sc:#FFC857;--sc-a:rgba(255,200,87,.16);--sc-b:rgba(255,200,87,.12)}
+.off{--sc:#FF6B78;--sc-a:rgba(255,107,120,.17);--sc-b:rgba(255,107,120,.13)}
+/* collapsed */
+.col{background:#0E1A26;border-radius:22px;padding:10px 12px;display:flex;align-items:center;gap:10px;box-shadow:0 14px 34px rgba(0,0,0,.45),inset 0 0 0 1px var(--line);margin-top:22px}
+.col .t{flex:1;min-width:0}
+.col .t b{font-size:14px}
+.col .t small{display:block;font-size:11.5px;color:var(--mu);margin-top:1px}
+.col .lat{font-family:"Inter Display";font-weight:700;font-size:22px;letter-spacing:-.6px;color:var(--sc);font-variant-numeric:tabular-nums}
+.col .lat em{font-size:12px;font-style:normal;margin-left:2px}
+.strip{display:flex;gap:2px;margin-top:5px}
+.strip i{width:12px;height:4px;border-radius:2px;background:var(--c)}
+/* android 16 */
+.a16{display:grid;grid-template-columns:1fr 1fr 1fr;gap:22px;align-items:start}
+.sys{border-radius:26px;padding:16px 18px 10px;font-family:Inter}
+.sys.lt{background:#EEF1F6;color:#1B1F24}
+.sys.dk{background:#1E2329;color:#E7EAEE}
+.sys .h{display:flex;align-items:center;gap:8px;font-size:12.5px;opacity:.75}
+.sys .h svg{width:18px;height:18px}
+.sys .ti{font-size:16px;font-weight:700;margin-top:10px}
+.sys .ti span{font-weight:500;opacity:.75}
+.sys .tx{font-size:13.5px;margin-top:3px;opacity:.85;line-height:1.4}
+.seg{display:flex;gap:3px;margin:14px 0 4px;align-items:center;position:relative}
+.seg i{flex:1;height:7px;border-radius:4px;background:var(--c)}
+.seg .trk{position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:#0E1A26;display:grid;place-items:center;box-shadow:0 0 0 3px var(--bgc)}
+.sys .ax{color:inherit;opacity:.55;font-size:10.5px}
+.sys .ac{display:flex;gap:22px;font-size:13.5px;font-weight:600;padding:12px 0 4px}
+.lt .ac{color:#11785A}.dk .ac{color:#5BE8B6}
+.sbar{background:#000;border-radius:22px;padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600;color:#fff}
+.lchip{display:flex;align-items:center;gap:7px;background:#FFC857;color:#2A1D00;border-radius:99px;padding:4px 12px 4px 8px;font-size:14px;font-weight:700}
+.note{background:#0B1520;border:1px solid #14283A;border-radius:22px;padding:18px 20px;font-size:13px;line-height:1.55;color:#A9BACB}
+.note b{color:#fff}
+.notes{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:34px}
+.notes div{font-size:13.5px;line-height:1.55;color:#A2B4C6}
+.notes b{display:block;color:#fff;font-family:"Inter Display";font-size:16px;margin-bottom:4px}
+</style></head><body>
+
+<h1>Notificação de monitoramento, <span>redesenhada.</span></h1>
+<div class="lead">Mesmas informações de hoje, em ordem de importância: o estado e a latência primeiro, o histórico como gráfico, e os detalhes depois.</div>
+
+<div class="sec">Android até a versão 15 · cartão próprio (RemoteViews) · expandida</div>
+<div class="stage">
+ <div class="row" id="cards"></div>
+ <div class="row" id="cols"></div>
+</div>
+
+<div class="sec" style="margin-top:40px">Android 16+ · modelo do sistema com ProgressStyle (Live Update)</div>
+<div class="stage" style="background:linear-gradient(180deg,#1a1d22,#0c0e12)">
+ <div class="a16" id="a16"></div>
+</div>
+
+<div class="notes">
+ <div><b>Latência em destaque</b>O número que a pessoa quer ver aparece grande e na cor do estado, sempre acompanhado do limite configurado. Assim dá para saber se 82 ms é bom ou ruim.</div>
+ <div><b>Histórico que conta uma história</b>As 12 últimas verificações viram um gráfico de barras com a linha do limite. Picos, quedas e a recuperação ficam visíveis num relance.</div>
+ <div><b>Diagnóstico com linguagem humana</b>A causa provável ganha uma linha própria com ícone, e o nome da rede vem com o tipo de conexão e a qualidade do sinal.</div>
+ <div><b>Android 16 sem perder o histórico</b>O ProgressStyle aceita segmentos coloridos, então as 12 verificações aparecem também no modelo do sistema, e a latência vai para o chip da barra de status.</div>
+</div>
+
+<script>
+const C={g:'#20E3A2',y:'#FFC857',r:'#FF6B78',n:'#2A3B4C'};
+const ring=(col='#20E3A2',bg=null)=>`<svg viewBox="0 0 24 24"><defs><linearGradient id="rgx" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#20E3A2"/><stop offset="1" stop-color="#28B8F0"/></linearGradient></defs>${bg?`<rect width="24" height="24" rx="7" fill="${bg}"/>`:''}<path d="M18.928,8A8,8 0,1 1,12,4" fill="none" stroke="${col==='grad'?'url(#rgx)':col}" stroke-width="2.8" stroke-linecap="round"/><circle cx="12" cy="12" r="2.4" fill="${col==='grad'?'#20E3A2':col}"/></svg>`;
+const wifi=c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"><path d="M2.5 9a14 14 0 0 1 19 0"/><path d="M6 12.5a9 9 0 0 1 12 0"/><path d="M9.3 16a4.4 4.4 0 0 1 5.4 0"/><circle cx="12" cy="19.3" r="1.3" fill="${c}" stroke="none"/></svg>`;
+const wifiOff=c=>`<svg viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"><path d="M2.5 9a14 14 0 0 1 6-3.3"/><path d="M14.5 5.6A14 14 0 0 1 21.5 9"/><path d="M6 12.5a9 9 0 0 1 3.4-2"/><path d="M9.3 16a4.4 4.4 0 0 1 5.4 0"/><path d="M3 3l18 18"/></svg>`;
+const ico={ok:`<svg viewBox="0 0 24 24" fill="none" stroke="#20E3A2" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.6 2.5L16 9.5"/></svg>`,
+ warn:`<svg viewBox="0 0 24 24" fill="none" stroke="#FFC857" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9 16H3z"/><path d="M12 10v4.2"/><circle cx="12" cy="17" r=".6" fill="#FFC857"/></svg>`,
+ off:`<svg viewBox="0 0 24 24" fill="none" stroke="#FF6B78" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>`};
+
+function chart(lat,st,limit,w=176,h=58){
+  const max=Math.max(limit*1.35,...lat.filter(x=>x!=null))*1.05;
+  const bw=(w-11*4)/12; let s='';
+  const ly=h-(limit/max)*h;
+  lat.forEach((v,i)=>{
+    const x=i*(bw+4), c=C[st[i]], last=i===11;
+    if(v==null){ s+=`<rect x="${x}" y="${h-6}" width="${bw}" height="6" rx="2" fill="${c}" opacity=".9"/><rect x="${x}" y="2" width="${bw}" height="${h-10}" rx="3" fill="${c}" opacity=".10"/>`; return;}
+    const bh=Math.max(5,(v/max)*h);
+    if(last) s+=`<rect x="${x-2}" y="${h-bh-2}" width="${bw+4}" height="${bh+2}" rx="4" fill="${c}" opacity=".28" filter="url(#bl)"/>`;
+    s+=`<rect x="${x}" y="${h-bh}" width="${bw}" height="${bh}" rx="3" fill="${c}" opacity="${last?1:.78}"/>`;
+  });
+  s+=`<line x1="0" x2="${w}" y1="${ly}" y2="${ly}" stroke="#9FB2C6" stroke-opacity=".45" stroke-dasharray="3 3"/>`;
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" overflow="visible"><defs><filter id="bl"><feGaussianBlur stdDeviation="3"/></filter></defs>${s}</svg>`;
+}
+
+const S=[
+ {cls:'ok',label:'Estável',name:'NET_5G97B2C9',sub:'Wi‑Fi 5 GHz · sinal bom',lat:81,limit:300,
+  hist:[74,79,81,77,83,80,78,82,79,76,80,81],st:'gggggggggggg',jit:'2 ms',loss:'0%',sig:'−58 dBm',jc:'',lc:'',
+  dx:'Internet estável. Nenhum problema nas últimas 24 min.',dxi:'ok',ftL:'Medido às <b>00:20</b>',ftR:'Próxima em <b>1:42</b>'},
+ {cls:'warn',label:'Instável',name:'NET_5G97B2C9',sub:'Wi‑Fi 5 GHz · sinal bom',lat:382,limit:300,
+  hist:[80,85,90,140,210,330,95,410,120,88,260,382],st:'gggggygyggyy',jit:'46 ms',loss:'0%',sig:'−61 dBm',jc:'#FFC857',lc:'',
+  dx:'Rota congestionada ou servidor lento.',dxi:'warn',ftL:'Medido às <b>00:20</b>',ftR:'Próxima em <b>1:42</b>'},
+ {cls:'off',label:'Sem resposta',name:'NET_5G97B2C9',sub:'Wi‑Fi 5 GHz · conectado sem internet',lat:null,limit:300,
+  hist:[82,80,95,180,null,null,null,null,null,null,null,null],st:'gggyrrrrrrrr',jit:'—',loss:'100%',sig:'−57 dBm',jc:'',lc:'#FF6B78',
+  dx:'Servidor ou rota sem resposta há 16 min.',dxi:'off',ftL:'Medido às <b>00:20</b>',ftR:'Próxima em <b>1:42</b>'}
+];
+
+document.getElementById('cards').innerHTML=S.map(s=>`
+<div>
+<div class="card ${s.cls}">
+ <div class="hd">${ring('grad')}<b>Linkzora</b> · Cloudflare · agora<div class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#C9D6E2" stroke-width="3" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg></div></div>
+ <div class="body">
+  <div class="r1"><div class="chip">${s.cls==='off'?wifiOff(`var(--sc)`).replace(/var\(--sc\)/g,C.r):wifi(s.cls==='ok'?C.g:C.y)}</div>
+   <div class="nm">${s.name}<small>${s.sub}</small></div><div class="pill"><i></i>${s.label}</div></div>
+  <div class="r2"><div><div class="big">${s.lat==null?'—':s.lat}<em>${s.lat==null?'':'ms'}</em></div><div class="cap">${s.lat==null?"0 de 5 conexões · limite "+s.limit+" ms":"latência · limite "+s.limit+" ms"}</div></div>
+   <div class="chart">${chart(s.hist,s.st,s.limit)}<div class="ax"><span>−24 min</span><span>agora</span></div></div></div>
+  <div class="r3"><div class="m"><span>Jitter</span><b style="color:${s.jc||'inherit'}">${s.jit}</b></div><div class="m"><span>Perda</span><b style="color:${s.lc||'inherit'}">${s.loss}</b></div><div class="m"><span>Sinal</span><b>${s.sig}</b></div></div>
+  <div class="dx">${ico[s.dxi]}${s.dx}</div>
+ </div>
+ <div class="ft"><span>${s.ftL}</span><span>${s.ftR}</span></div>
+ <div class="act"><span>Verificar agora</span><span>Pausar</span></div>
+</div></div>`).join('');
+
+document.getElementById('cols').innerHTML=S.map(s=>`
+<div class="col ${s.cls}"><div class="chip">${s.cls==='off'?wifiOff(C.r):wifi(s.cls==='ok'?C.g:C.y)}</div>
+ <div class="t"><b>${s.name}</b><small>${s.label} · ${s.sub.split(' · ')[0]}</small>
+ <div class="strip">${[...s.st].map(c=>`<i style="--c:${C[c]}"></i>`).join('')}</div></div>
+ <div class="lat">${s.lat==null?'—':s.lat}<em>${s.lat==null?'':'ms'}</em></div></div>`).join('');
+
+const segs=st=>[...st].map(c=>`<i style="--c:${C[c]}"></i>`).join('');
+document.getElementById('a16').innerHTML=`
+<div class="sys lt" style="--bgc:#EEF1F6">
+ <div class="h">${ring('#11785A')}Linkzora · Cloudflare · agora</div>
+ <div class="ti">Conexão instável <span>· 382 ms</span></div>
+ <div class="tx">Rota congestionada ou servidor lento<br>Jitter 46 ms · perda 0% · Wi‑Fi sinal bom</div>
+ <div class="seg">${segs(S[1].st)}<div class="trk">${ring('grad')}</div></div>
+ <div class="ax" style="display:flex;justify-content:space-between"><span>−24 min</span><span>próxima às 00:22</span></div>
+ <div class="ac"><span>Verificar agora</span><span>Pausar</span></div>
+</div>
+<div class="sys dk" style="--bgc:#1E2329">
+ <div class="h">${ring('#5BE8B6')}Linkzora · Cloudflare · agora</div>
+ <div class="ti">Conexão estável <span>· 81 ms</span></div>
+ <div class="tx">Internet estável<br>Jitter 2 ms · perda 0% · Wi‑Fi sinal bom</div>
+ <div class="seg">${segs(S[0].st)}<div class="trk">${ring('grad')}</div></div>
+ <div class="ax" style="display:flex;justify-content:space-between"><span>−24 min</span><span>próxima às 00:22</span></div>
+ <div class="ac"><span>Verificar agora</span><span>Pausar</span></div>
+</div>
+<div>
+ <div class="sbar">00:20 <div class="lchip"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M18.928,8A8,8 0,1 1,12,4" fill="none" stroke="#2A1D00" stroke-width="2.8" stroke-linecap="round"/><circle cx="12" cy="12" r="2.4" fill="#2A1D00"/></svg>382 ms</div><span style="margin-left:auto;opacity:.8">100%</span></div>
+ <div class="note" style="margin-top:18px"><b>Chip na barra de status.</b> Com <i>setShortCriticalText("382 ms")</i>, a latência fica visível com o app fechado e o chip ganha a cor do estado.<br><br><b>Segmentos coloridos.</b> <i>Notification.ProgressStyle</i> com 12 <i>Segment</i>, um por verificação, e o anel como <i>tracker icon</i>. O modelo é do sistema, então o Android continua promovendo a notificação a Live Update.</div>
+</div>`;
+</script>
+</body></html>

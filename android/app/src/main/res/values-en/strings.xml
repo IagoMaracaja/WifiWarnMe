@@ -86,4 +86,22 @@
     <string name="error_history">History unavailable</string>
     <string name="error_scan">Could not scan the network</string>
     <string name="error_permission_pending">Wait for the current permission request</string>
+    <!-- Redesigned notification (design/notificacao). -->
+    <string name="notif_pill_online">Stable</string>
+    <string name="notif_pill_slow">Unstable</string>
+    <string name="notif_pill_offline">No response</string>
+    <string name="notif_pill_checking">Checking</string>
+    <string name="notif_latency_caption">latency · limit %1$d ms</string>
+    <string name="notif_no_response_caption">%1$d of %2$d connections · limit %3$d ms</string>
+    <string name="notif_band">Wi-Fi %1$s GHz</string>
+    <string name="notif_connected_no_internet">connected without internet</string>
+    <string name="notif_signal">Signal</string>
+    <string name="notif_stable_window">Stable, no problems for %1$d min.</string>
+    <string name="notif_stable">Stable internet.</string>
+    <string name="notif_problem_since">%1$s for %2$d min.</string>
+    <string name="notif_axis_start">−%1$d min</string>
+    <string name="notif_axis_now">now</string>
+    <string name="notif_measured_at">Measured at %1$s</string>
+    <string name="notif_next_in" formatted="false">Next in %s</string>
+    <string name="notif_live_details">Jitter %1$d ms · loss %2$d%%</string>
 </resources>

@@ -37,6 +37,18 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        // A service started in the background has no location type (Android 14+); renew it now
+        // that the app is visible so the Wi-Fi name can be read again.
+        if (MonitorService.active) {
+            try {
+                startService(Intent(this, MonitorService::class.java).setAction(MonitorService.FOREGROUND))
+            } catch (_: RuntimeException) {
+            }
+        }
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 101) {
