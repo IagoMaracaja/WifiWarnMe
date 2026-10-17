@@ -273,8 +273,11 @@ class _StartupGateState extends State<_StartupGate> {
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
+    // Splash, setup and home swap without a cross-fade: fading a whole screen
+    // draws it into an offscreen layer, which showed static on a Galaxy Z Fold.
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 450),
+      duration: Duration.zero,
+      transitionBuilder: (child, _) => child,
       child: onboarding == true
           ? _Onboarding(
               key: const ValueKey('onboarding'), onFinished: _finishOnboarding)

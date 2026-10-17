@@ -364,6 +364,8 @@ Métodos do canal: `status` (com `knownCheckedAt`), `start`, `configure`, `probe
 
 ### Padrão visual
 
+**Sem camadas temporárias grandes.** Num Galaxy Z Fold (Impeller/Vulkan), esmaecer uma área grande (`FadeTransition`, `AnimatedOpacity`) ou desfocar o fundo (`BackdropFilter`) mostrava chiado de TV nas áreas sem pintura própria. Por isso: a troca de tela (splash, configuração, início) e de aba não esmaece; o subtítulo e a pílula de estado trocam o texto direto; o véu do menu de servidor anima a própria cor; o botão Voltar da configuração some com `Visibility`; e o desfoque de vidro (`_GlassBox`, `blur`) fica só na barra de abas, a única que passa sobre conteúdo. Fundos ficam opacos, inclusive atrás da barra superior.
+
 Nenhuma cor fica fixa nos widgets: todas vêm de `LinkzoraPalette` (`lib/palette.dart`), um `ThemeExtension` com as variantes `LinkzoraPalette.dark` e `LinkzoraPalette.light`. Os widgets leem a paleta com `context.palette` (fora do `Linkzora`, como em testes que montam só a `Home`, ela cai na variante escura). Como a paleta viaja no tema, o `lerp` dela anima todas as cores na troca de modo. A paleta também gera o `ThemeData` (`palette.theme`) e o estilo das barras do sistema (`palette.overlayStyle`).
 
 | Papel | Noturno | Claro |
