@@ -257,6 +257,7 @@ class _DevicesPageState extends State<_DevicesPage> {
           color: p.muted,
           title: l.howToReadTitle,
           text: widget.monitoring ? l.howToReadMonitoring : l.howToReadIdle,
+          collapsible: true,
         ),
       ],
     );
@@ -1130,13 +1131,16 @@ class _WifiPanel extends StatelessWidget {
   }
 }
 
-class _NoticePanel extends StatelessWidget {
+/// Panel with an icon, a title and a text. A [collapsible] panel starts
+/// showing only the title and reveals the text on tap, for long explanations.
+class _NoticePanel extends StatefulWidget {
   const _NoticePanel({
     required this.icon,
     required this.color,
     required this.title,
     required this.text,
     this.action,
+    this.collapsible = false,
   });
 
   final IconData icon;
@@ -1144,43 +1148,84 @@ class _NoticePanel extends StatelessWidget {
   final String title;
   final String text;
   final (String, VoidCallback)? action;
+  final bool collapsible;
+
+  @override
+  State<_NoticePanel> createState() => _NoticePanelState();
+}
+
+class _NoticePanelState extends State<_NoticePanel> {
+  bool expanded = false;
 
   @override
   Widget build(BuildContext context) {
     final p = context.palette;
-    return _Panel(
+    final open = !widget.collapsible || expanded;
+    final action = widget.action;
+    final panel = _Panel(
       padding: const EdgeInsets.all(16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+            open ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
-          _IconBadge(icon: icon, color: color, size: 38),
+          _IconBadge(icon: widget.icon, color: widget.color, size: 38),
           const SizedBox(width: 12),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w800)),
-                const SizedBox(height: 4),
-                Text(text,
-                    style:
-                        TextStyle(color: p.muted, fontSize: 12, height: 1.35)),
-                if (action != null) ...[
-                  const SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: action!.$2,
-                    child: Text(action!.$1,
-                        style: TextStyle(
-                            color: p.accent,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w900)),
+            child: AnimatedSize(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              alignment: Alignment.topLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(widget.title,
+                            style: const TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w800)),
+                      ),
+                      if (widget.collapsible)
+                        AnimatedRotation(
+                          turns: expanded ? .5 : 0,
+                          duration: const Duration(milliseconds: 220),
+                          child: Icon(Icons.expand_more_rounded,
+                              color: p.muted, size: 22),
+                        ),
+                    ],
                   ),
+                  if (open) ...[
+                    const SizedBox(height: 4),
+                    Text(widget.text,
+                        style: TextStyle(
+                            color: p.muted, fontSize: 12, height: 1.35)),
+                    if (action != null) ...[
+                      const SizedBox(height: 8),
+                      GestureDetector(
+                        onTap: action.$2,
+                        child: Text(action.$1,
+                            style: TextStyle(
+                                color: p.accent,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w900)),
+                      ),
+                    ],
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+    if (!widget.collapsible) return panel;
+    return Semantics(
+      button: true,
+      expanded: expanded,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => setState(() => expanded = !expanded),
+        child: panel,
       ),
     );
   }
