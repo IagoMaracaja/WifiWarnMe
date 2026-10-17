@@ -3,6 +3,7 @@ package com.linkzora.app
 import java.io.ByteArrayOutputStream
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -249,11 +250,22 @@ class DeviceDiscoveryTest {
     // ------------------------------------------------------------------ LAN stats & subnet
 
     @Test
+    fun lanJitterKeepsFrequentSpikes() {
+        // Two spikes in five replies: the device really oscillates.
+        val erratic = LanStats.summarize(listOf(10L, 200L, 15L, 180L, 12L), 5)
+        assertEquals(15L, erratic.latency)
+        assertEquals((190 + 185 + 165 + 168) / 4L, erratic.jitter)
+        // Uniformly slow replies are not spikes.
+        assertEquals(listOf(300L, 320L, 310L), LanStats.withoutRareSpikes(listOf(300L, 320L, 310L), 310L))
+    }
+
+    @Test
     fun lanStatsKeepSlowRepliesAndCountLoss() {
         val result = LanStats.summarize(listOf(4L, 6L, 900L, 5L), 5)
         assertEquals(5L, result.latency)
         assertEquals(20, result.failureRate)
-        assertEquals((2 + 894 + 895) / 3L, result.jitter)
+        // The lone 900 ms reply is a power-save spike: it does not make up the jitter.
+        assertEquals(2L, result.jitter)
         assertEquals(-1L, LanStats.summarize(emptyList(), 4).latency)
         assertEquals(100, LanStats.summarize(emptyList(), 4).failureRate)
     }
@@ -329,5 +341,20 @@ class DeviceDiscoveryTest {
         assertEquals(1, WifiMath.suggestedChannel(mine, crowded))
         assertNull(WifiMath.suggestedChannel(mine, listOf(net(2412, -80))))
         assertNull(WifiMath.suggestedChannel(net(5180, bssid = "me"), crowded))
+    }
+
+    @Test
+    fun recognisesTheUsersOwnAccessPoints() {
+        val mine = WifiNetwork("Casa", "a4:2b:b0:11:22:30", 2462, -55)
+        // Repeater or mesh node with the same name.
+        assertTrue(WifiMath.isOwn(mine, WifiNetwork("Casa", "10:00:00:00:00:01", 2462, -75)))
+        // Other band or extra SSID of the same router: only the last or the first octet changes.
+        assertTrue(WifiMath.isOwn(mine, WifiNetwork("Casa_5G", "a4:2b:b0:11:22:31", 5180, -70)))
+        assertTrue(WifiMath.isOwn(mine, WifiNetwork("Visitas", "a6:2b:b0:11:22:30", 2462, -56)))
+        // Neighbours.
+        assertFalse(WifiMath.isOwn(mine, WifiNetwork("Vizinho", "a4:2b:b0:99:22:30", 2462, -70)))
+        assertFalse(WifiMath.isOwn(mine, WifiNetwork("Vizinho", "f0:9f:c2:aa:bb:cc", 2462, -70)))
+        // Hidden networks never match by name, and malformed addresses never match.
+        assertFalse(WifiMath.isOwn(WifiNetwork("", "me", 2462, -55), WifiNetwork("", "x", 2462, -70)))
     }
 }

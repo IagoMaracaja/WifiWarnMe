@@ -155,7 +155,8 @@ class NetworkDevice {
 
 class WifiNeighbor {
   const WifiNeighbor(
-      this.ssid, this.band, this.channel, this.rssi, this.overlap);
+      this.ssid, this.band, this.channel, this.rssi, this.overlap,
+      {this.own = false});
 
   factory WifiNeighbor.fromMap(Map<dynamic, dynamic> value) => WifiNeighbor(
         value['ssid']?.toString() ?? '',
@@ -163,6 +164,7 @@ class WifiNeighbor {
         _int(value['channel'], 0),
         _int(value['rssi'], -100),
         value['overlap']?.toString() ?? 'none',
+        own: value['own'] == true,
       );
 
   final String ssid;
@@ -172,6 +174,22 @@ class WifiNeighbor {
 
   /// "same" (same channel), "partial" (overlapping channels) or "none".
   final String overlap;
+
+  /// Part of the user's own network (repeater, mesh node, the router's other
+  /// band): listed, but not counted as interference.
+  final bool own;
+
+  /// How much this network adds to the interference score, as in the native
+  /// WifiMath: its loudness (0 at -90 dBm, 1 at -50 dBm) weighed by the
+  /// overlap (partial overlap collides more, so it weighs 1.2).
+  double get impact {
+    final loudness = ((rssi + 90) / 40).clamp(0, 1).toDouble();
+    return switch (overlap) {
+      'same' => loudness,
+      'partial' => 1.2 * loudness,
+      _ => 0,
+    };
+  }
 }
 
 class WifiEnvironment {
@@ -190,6 +208,7 @@ class WifiEnvironment {
     this.sameChannel = 0,
     this.partialOverlap = 0,
     this.totalNetworks = 0,
+    this.ownNetworks = 0,
     this.suggestedChannel,
     this.networks = const [],
   });
@@ -211,6 +230,7 @@ class WifiEnvironment {
       sameChannel: _int(value['sameChannel'], 0),
       partialOverlap: _int(value['partialOverlap'], 0),
       totalNetworks: _int(value['totalNetworks'], 0),
+      ownNetworks: _int(value['ownNetworks'], 0),
       suggestedChannel: (value['suggestedChannel'] as num?)?.toInt(),
       networks: [
         for (final item in (value['networks'] as List? ?? []))
@@ -237,6 +257,9 @@ class WifiEnvironment {
   final int sameChannel;
   final int partialOverlap;
   final int totalNetworks;
+
+  /// Access points of the user's own network left out of the counts above.
+  final int ownNetworks;
   final int? suggestedChannel;
   final List<WifiNeighbor> networks;
 

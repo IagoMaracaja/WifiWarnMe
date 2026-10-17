@@ -1751,6 +1751,30 @@ abstract class AppLocalizations {
   /// **'Dica: o canal {channel} está mais livre. Mude nas configurações do roteador.'**
   String channelTip(Object channel);
 
+  /// No description provided for @interferenceBar.
+  ///
+  /// In pt, this message translates to:
+  /// **'Interferência de redes vizinhas'**
+  String get interferenceBar;
+
+  /// No description provided for @ownNetworkTag.
+  ///
+  /// In pt, this message translates to:
+  /// **'sua rede'**
+  String get ownNetworkTag;
+
+  /// No description provided for @neighborsWeak.
+  ///
+  /// In pt, this message translates to:
+  /// **'Os vizinhos no seu canal têm sinal fraco e pouco afetam a sua conexão.'**
+  String get neighborsWeak;
+
+  /// No description provided for @ownNetworksNote.
+  ///
+  /// In pt, this message translates to:
+  /// **'{count, plural, =1{1 ponto de acesso da sua rede não entra na conta} other{{count} pontos de acesso da sua rede não entram na conta}}'**
+  String ownNetworksNote(int count);
+
   /// No description provided for @diagNoNetwork.
   ///
   /// In pt, this message translates to:

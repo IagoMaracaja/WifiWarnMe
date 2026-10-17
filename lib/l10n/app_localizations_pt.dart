@@ -1086,6 +1086,27 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get interferenceBar => 'Interferência de redes vizinhas';
+
+  @override
+  String get ownNetworkTag => 'sua rede';
+
+  @override
+  String get neighborsWeak =>
+      'Os vizinhos no seu canal têm sinal fraco e pouco afetam a sua conexão.';
+
+  @override
+  String ownNetworksNote(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pontos de acesso da sua rede não entram na conta',
+      one: '1 ponto de acesso da sua rede não entra na conta',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get diagNoNetwork => 'Sem rede ativa no aparelho';
 
   @override

@@ -96,10 +96,19 @@ object WifiEnvironment {
         val nowMicros = SystemClock.elapsedRealtime() * 1000L
         val newest = results.maxOfOrNull { it.timestamp } ?: 0L
         val others = networks.filter { it.bssid != mine.bssid }
-        val score = WifiMath.interferenceScore(mine, others)
+        // The user's own access points (repeaters, the other band) are listed but not counted
+        // as interference: they are not neighbours the user can move away from.
+        val own = others.filter { WifiMath.isOwn(mine, it) }.toSet()
+        val neighbours = others.filterNot { it in own }
+        val score = WifiMath.interferenceScore(mine, neighbours)
         val listed = others
             .map { it to WifiMath.overlap(mine, it) }
-            .sortedWith(compareBy<Pair<WifiNetwork, String>>({ overlapRank(it.second) }, { -it.first.rssi }))
+            .sortedWith(
+                compareBy<Pair<WifiNetwork, String>>(
+                    { if (it.first in own) 0 else 1 },
+                    { overlapRank(it.second) },
+                    { -it.first.rssi })
+            )
             .take(20)
         return mapOf(
             "available" to true,
@@ -114,10 +123,11 @@ object WifiEnvironment {
             "linkSpeed" to (info?.linkSpeed ?: 0),
             "score" to score,
             "level" to WifiMath.interferenceLevel(score),
-            "sameChannel" to others.count { WifiMath.overlap(mine, it) == "same" },
-            "partialOverlap" to others.count { WifiMath.overlap(mine, it) == "partial" },
-            "totalNetworks" to others.size,
-            "suggestedChannel" to WifiMath.suggestedChannel(mine, others),
+            "sameChannel" to neighbours.count { WifiMath.overlap(mine, it) == "same" },
+            "partialOverlap" to neighbours.count { WifiMath.overlap(mine, it) == "partial" },
+            "totalNetworks" to neighbours.size,
+            "ownNetworks" to own.size,
+            "suggestedChannel" to WifiMath.suggestedChannel(mine, neighbours),
             "networks" to listed.map { (network, overlap) ->
                 mapOf(
                     "ssid" to network.ssid.ifBlank { "(rede oculta)" },
@@ -125,7 +135,8 @@ object WifiEnvironment {
                     "band" to WifiMath.band(network.frequency),
                     "channel" to WifiMath.channel(network.frequency),
                     "rssi" to network.rssi,
-                    "overlap" to overlap
+                    "overlap" to overlap,
+                    "own" to (network in own)
                 )
             }
         )

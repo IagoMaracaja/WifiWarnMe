@@ -226,8 +226,6 @@ class _Appearance extends ValueNotifier<bool> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_darkModeKey, dark);
   }
-
-  Future<void> toggle() => setDarkMode(!value);
 }
 
 class _AppearanceScope extends InheritedNotifier<_Appearance> {

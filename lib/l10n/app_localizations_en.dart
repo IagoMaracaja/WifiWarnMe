@@ -1088,6 +1088,27 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get interferenceBar => 'Interference from neighbouring networks';
+
+  @override
+  String get ownNetworkTag => 'your network';
+
+  @override
+  String get neighborsWeak =>
+      'Neighbours on your channel are faint and barely affect your connection.';
+
+  @override
+  String ownNetworksNote(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count access points of your own network are not counted',
+      one: '1 access point of your own network is not counted',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get diagNoNetwork => 'No active network on the device';
 
   @override
