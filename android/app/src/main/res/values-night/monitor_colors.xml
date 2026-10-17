@@ -1,0 +1,9 @@
+<resources>
+    <color name="monitor_text">#EEF8F3</color>
+    <color name="monitor_secondary">#B0C5BC</color>
+    <color name="monitor_surface">#283D36</color>
+    <color name="monitor_online">#5BE0AB</color>
+    <color name="monitor_slow">#FFD080</color>
+    <color name="monitor_offline">#FF9DA5</color>
+    <color name="monitor_checking">#A7CEFF</color>
+</resources>

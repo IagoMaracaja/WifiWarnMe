@@ -1,0 +1,41 @@
+- [x] Colocar temporizador na tela de quanto tempo falta até a próxima verificação (apenas na home), localizado abaixo do círculo, mais à direita.
+- [x] Mudar o ícone e o título de "Proteção da conexão" para indicar monitoramento.
+- [x] Criar uma aba de monitoria, informando períodos de falhas, gráfico de oscilação e melhor período de uso da internet.
+- [x] Identificar causas prováveis para a conexão ruim usando disponibilidade, falhas, jitter, distância do servidor e sinal Wi-Fi. O diagnóstico é apresentado como provável porque o app não enxerga a infraestrutura interna da operadora.
+- [x] Na aba de monitoria, dividir as conexões por servidor, informando se aquele período foi para um servidor na Europa etc.
+- [x] Mudar o nome do aplicativo para Linkzora.
+- [x] Colocar na home qual servidor está em uso (tag semelhante à do temporizador, no canto superior esquerdo e adaptável ao tamanho do nome).
+- [x] Na aba Monitoria, também mostrar no item o problema, ainda que seja uma causa provável.
+- [x] Mudar o ícone para o enviado no chat e torná-lo o ícone do aplicativo.
+- [x] Criar uma splash screen apenas com o ícone enviado e um loading; durante o loading, fazer a primeira verificação e abrir a home com o primeiro dado.
+
+
+Novas modificações
+- [x] Permitir ao usuário escolher os alertas de mudança: não notificar, notificar uma vez por sessão de monitoramento ou notificar a cada mudança.
+- [x] Melhorar o cartão de monitoramento para incluir a escolha de alertas sem deixá-lo grande ou visualmente pesado.
+- [x] Fazer os ícones das notificações refletirem o ícone do app.
+- [x] A aba monitoria precisa ser por servidor, ou seja, manter o estado apenas por servidor, se eu mudar o grafico muda também
+- [x] Melhorar o grafico, pode usar libs externas, mas, precisa ser diferente e bonito, o atual etá muito simples
+- [x] Icone da notificação está no lugar errado, está em dois lugares. deixe o colorido ao lado do nome.
+- [x] Notificação fixa precisa estar na tela de bloqueio também (Live Update)
+- [x] Filtro de servidor ser um dropdown bonito e aproveite e mude também o modal de seleção de alerta, ta muito padrão, deixe no visual do app.
+- [x] revisa o app e ajusta a UI para ficar conforme as suas ultimas mudançass, manteer o que voce fez como um padrão de UI, verifique também se os calculos usados no service faz sentido e se precisa melhorar algo.
+- [x] Ajuste visualmente as notifiicaçõe fixas, para ficar bonita e também os pushs notifications, deixe-os moderno.
+- [x] Verifique se está faltando testes importantes.
+- [x] Crie uma documentação sobre as funcionalidades ee contexto do aplicativo
+- [x] Verifique bugs e corrija
+- [x] Crie uma pagina de configuração inicial, que só roda a primeira vez que abre o app, depois salva isso (a configuração pergunta servidor, alertas, etc)
+- [x] Ajuste para um visual bonito e desenhado (enviado via chat) notificação
+- [x] Melhorar visual das abas e do topbar 
+- [x] Criar modo noturno on/off
+- [x] Ajustar limite (dar opção de entrada manual)e começar de 30, 60, 80, 100, 200, 300, 400, 500...
+- [x] Na nootificação, remove o icone do aplicativo que está a direita, para que seja possível usar todo o espaço da notificação, também, ajuste esse tracejado, não ficou bom, deixe uma linha continua.
+- [x] Ajuste icones do filtro de servidores (pode usar lib externa para icones bonitos)
+- [x] Corrigir bug de scroll (preesentes em todas as abas), as abas estão em cima dos icones, ou seja, o scroll está bugado.
+- [x] modo diurno, o branco do circulo centrar esta destoado, e com margem. 
+- [x] Eventos (ultima aba) estão sendo salvas? reseta? qual seria o melhor? tem filtro por dia?
+- [x] Crie uma aba separada para identificar os dispositivos da rede que estão causando problemas, siga analise que voce fez, implemente as melhores, coloque o percentual de cada dispositivo conforme as regras que voce cria, tente deixar o melhor possivel
+- [x] Mude o icone do app, para o que enviei no chat.
+- [x] Criar versão de widget (aqueles que você pode colocar na home, e etc.)
+- [x] Criar um sessão de doação (o famoso pague me um cafézinho) com este link do buy me a coffee https://buymeacoffee.com/andremaracaja, com alguma mensagem tipo "gostando do app, que tal pagar um cafézinho pra esse dev ;)"
+- [x] Criar arquivo te internacionalização para os idiomas PT, ES, EN, usar bandeirinhas para mudança de linguagem (porém, detectar direto do sistema como prefencial/default) e colocar no setup-inicial. 

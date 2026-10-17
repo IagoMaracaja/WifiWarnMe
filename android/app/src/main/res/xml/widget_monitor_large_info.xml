@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Large widget: 4x2 compact card, the full card from about 4x3 (see MonitorWidgets). Updated by
+     MonitorService after every check; the 30 min period is only a fallback. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_large_description"
+    android:initialLayout="@layout/widget_monitor_large"
+    android:minWidth="250dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="200dp"
+    android:minResizeHeight="110dp"
+    android:previewImage="@drawable/widget_preview_large_image"
+    android:previewLayout="@layout/widget_monitor_large_preview"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="4"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen" />

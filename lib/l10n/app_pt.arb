@@ -1,0 +1,805 @@
+{
+  "@@locale": "pt",
+  "tabConnection": "Conexão",
+  "tabMonitoring": "Monitoria",
+  "tabEvents": "Eventos",
+  "tabNetwork": "Rede",
+  "subtitleConnection": "Conexão agora",
+  "subtitleMonitoring": "Últimas 24 horas",
+  "subtitleEvents": "Histórico",
+  "subtitleNetwork": "Aparelhos e causas",
+  "nightModeTurnOff": "Desligar modo noturno",
+  "nightModeTurnOn": "Ligar modo noturno",
+  "settings": "Ajustes",
+  "statusPaused": "Pausado",
+  "statusMeasuring": "Medindo",
+  "stateStable": "Estável",
+  "stateUnstable": "Instável",
+  "stateNoResponse": "Sem resposta",
+  "noResponseLower": "sem resposta",
+  "milliseconds": "{value} ms",
+  "@milliseconds": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "minutes": "{value} min",
+  "@minutes": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "hoursShort": "{value} h",
+  "@hoursShort": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "monitoringPaused": "Monitoramento pausado",
+  "checkingNow": "Verificando agora",
+  "preparingCheck": "Preparando verificação",
+  "nextCheckIn": "Próxima em {time}",
+  "@nextCheckIn": {
+    "placeholders": {
+      "time": {
+        "type": "Object"
+      }
+    }
+  },
+  "monitorUnreachable": "Não foi possível falar com o monitor",
+  "wifiNameSheetTitle": "Mostrar o nome do Wi-Fi",
+  "wifiNameSheetSubtitle": "Permissão de localização precisa",
+  "wifiNameExplanation": "O Android só revela o nome da rede para apps com localização precisa. O Linkzora usa essa permissão apenas para identificar o Wi-Fi e ler a intensidade do sinal; nenhuma localização é salva ou enviada.",
+  "notNow": "Agora não",
+  "continueAction": "Continuar",
+  "wifiNameEnabled": "Nome da rede habilitado.",
+  "wifiNameDenied": "Sem a permissão, a rede aparece apenas como Wi-Fi.",
+  "identifyNetworkFailed": "Não foi possível identificar a rede",
+  "settingsApplied": "Ajustes aplicados ao monitor.",
+  "serverTag": "Servidor · {name}",
+  "@serverTag": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      }
+    }
+  },
+  "noReading": "Sem leitura",
+  "readingDetails": "Jitter {jitter} ms · Perda {loss}% · {ok}/{total}",
+  "@readingDetails": {
+    "placeholders": {
+      "jitter": {
+        "type": "Object"
+      },
+      "loss": {
+        "type": "Object"
+      },
+      "ok": {
+        "type": "Object"
+      },
+      "total": {
+        "type": "Object"
+      }
+    }
+  },
+  "awaitingSamples": "Aguardando amostras",
+  "monitoringTitle": "Monitoramento",
+  "monitoringActive": "Ativo em segundo plano",
+  "monitoringInactive": "Ative para medir sua conexão",
+  "changeAlerts": "Alertas de mudança",
+  "identifyNetwork": "Identificar esta rede",
+  "identifyNetworkHint": "Mostrar o nome e o sinal do Wi-Fi",
+  "metricInterval": "Intervalo",
+  "metricLimit": "Limite",
+  "metricSignal": "Sinal",
+  "transportMobile": "Móvel",
+  "transportCable": "Cabo",
+  "signalWeak": "Fraco",
+  "signalFair": "Regular",
+  "signalGood": "Bom",
+  "signalQuality": "{level, select, weak{fraco} fair{regular} other{bom}}",
+  "@signalQuality": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "awaitingFirstMeasurement": "Aguardando a primeira medição.",
+  "serverSummary": "Resumo do servidor",
+  "oscillations": "Oscilações",
+  "bestHour": "Melhor horário",
+  "collectingData": "Coletando dados",
+  "hourRange": "{from}h–{to}h",
+  "@hourRange": {
+    "placeholders": {
+      "from": {
+        "type": "Object"
+      },
+      "to": {
+        "type": "Object"
+      }
+    }
+  },
+  "latencyPulse": "Pulso da latência",
+  "tapForDetails": "Toque para detalhes",
+  "latencyNow": "Agora {value} ms",
+  "@latencyNow": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "jitterBand": "Faixa de jitter",
+  "statMinimum": "Mínima",
+  "statMedian": "Mediana",
+  "statPeak": "Pico (p95)",
+  "statJitter": "Jitter médio",
+  "probableCause": "Causa provável",
+  "awaitingMeasurements": "Aguardando medições",
+  "evidenceNoSample": "Faça uma medição para analisar este servidor.",
+  "evidenceWifiSignal": "{level, select, weak{sinal Wi-Fi fraco} fair{sinal Wi-Fi regular} other{sinal Wi-Fi bom}}",
+  "@evidenceWifiSignal": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "evidenceJitter": "jitter {value}",
+  "@evidenceJitter": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "evidenceLoss": "perda {value}%",
+  "@evidenceLoss": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "failurePeriods": "Períodos com falhas",
+  "unknownCause": "Causa não identificada",
+  "noConnection": "Sem conexão",
+  "unstableConnection": "Conexão instável",
+  "olderPeriods": "{count, plural, =1{+ 1 período anterior} other{+ {count} períodos anteriores}}",
+  "@olderPeriods": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noFailures24h": "Nenhuma falha registrada nas últimas 24 horas.",
+  "chartNow": "agora",
+  "chartLimit": "limite {value} ms",
+  "@chartLimit": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "chartJitter": "jitter ±{value} ms",
+  "@chartJitter": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "measurementCount": "{count, plural, =1{1 medição · 24 h} other{{count} medições · 24 h}}",
+  "@measurementCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "analyzedServer": "Servidor analisado",
+  "inUse": "EM USO",
+  "unknownTarget": "Destino não identificado",
+  "alertNone": "Sem alertas",
+  "alertNoneDescription": "Só a notificação fixa do monitor.",
+  "alertOnce": "Uma vez por sessão",
+  "alertOnceDescription": "Avisa na primeira mudança após ativar.",
+  "alertChanges": "A cada mudança",
+  "alertChangesDescription": "Avisa sempre que a conexão mudar.",
+  "alertSheetSubtitle": "Quando o Linkzora deve chamar sua atenção",
+  "noEventsTitle": "Nenhum evento ainda",
+  "noEventsText": "As mudanças da conexão aparecerão aqui.",
+  "allDays": "Todos os dias",
+  "filterAll": "Todos",
+  "eventCount": "{count, plural, =1{1 evento} other{{count} eventos}}",
+  "@eventCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "changeCount": "{count, plural, =1{1 mudança} other{{count} mudanças}}",
+  "@changeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "summaryDrops": "Quedas",
+  "summaryInstabilities": "Instabilidades",
+  "summaryRecoveries": "Estabilizou",
+  "today": "Hoje",
+  "yesterday": "Ontem",
+  "noDate": "Sem data",
+  "dayMonth": "{day}/{month}",
+  "@dayMonth": {
+    "description": "Short day and month of an event day; reorder for the locale.",
+    "placeholders": {
+      "day": {
+        "type": "Object"
+      },
+      "month": {
+        "type": "Object"
+      }
+    }
+  },
+  "settingsSubtitle": "Ritmo das medições e destino do teste",
+  "nightMode": "Modo noturno",
+  "nightModeSubtitle": "Tema escuro em todo o app",
+  "saveSettings": "Salvar ajustes",
+  "language": "Idioma",
+  "languageSystem": "Sistema",
+  "languageSystemHint": "Segue o idioma do aparelho",
+  "testLocation": "Local do teste",
+  "nearbyServer": "Servidor próximo",
+  "serverAddress": "Endereço {address} · anycast",
+  "@serverAddress": {
+    "placeholders": {
+      "address": {
+        "type": "Object"
+      }
+    }
+  },
+  "locationNear": "Próximo",
+  "locationSaoPaulo": "São Paulo",
+  "locationUnitedStates": "Estados Unidos",
+  "locationEurope": "Europa",
+  "locationNearDetail": "Anycast · menor rota disponível",
+  "locationSaoPauloDetail": "AWS · sa-east-1",
+  "locationUnitedStatesDetail": "AWS · Virgínia · us-east-1",
+  "locationEuropeDetail": "AWS · Irlanda · eu-west-1",
+  "checkEvery": "Verificar a cada",
+  "alertAbove": "Avisar acima de",
+  "customLimit": "Personalizado",
+  "limitTypeError": "Digite o limite em milissegundos.",
+  "limitRangeError": "Use um valor entre {min} e {max} ms.",
+  "@limitRangeError": {
+    "placeholders": {
+      "min": {
+        "type": "Object"
+      },
+      "max": {
+        "type": "Object"
+      }
+    }
+  },
+  "limitRangeHint": "Entre {min} e {max} ms.",
+  "@limitRangeHint": {
+    "placeholders": {
+      "min": {
+        "type": "Object"
+      },
+      "max": {
+        "type": "Object"
+      }
+    }
+  },
+  "limitHintExample": "Ex.: 450",
+  "limitFootnote": "Cada verificação usa 5 conexões e confirma resultados suspeitos com mais 5.",
+  "donationTitle": "Gostando do Linkzora?",
+  "donationMessage": "Gostando do app? Que tal pagar um cafezinho pra esse dev ;)",
+  "@donationMessage": {
+    "description": "Friendly donation nudge; keep the playful tone and the wink."
+  },
+  "donationButton": "Pagar um cafezinho",
+  "donationOpenFailed": "Não foi possível abrir o link. Acesse buymeacoffee.com/andremaracaja",
+  "donationDismiss": "Dispensar",
+  "back": "Voltar",
+  "setUp": "Configurar",
+  "skip": "Pular",
+  "allow": "Permitir",
+  "startMonitoring": "Começar monitoramento",
+  "permissionRequestFailed": "Não foi possível pedir a permissão",
+  "startFailed": "Não foi possível iniciar o monitoramento",
+  "welcomeTitle": "Boas-vindas ao Linkzora",
+  "welcomeText": "Saiba quando a internet cai, oscila ou fica lenta, sem gastar dados nem bateria.",
+  "featureBackgroundTitle": "Medição em segundo plano",
+  "featureBackgroundText": "Latência, jitter e perda a cada poucos minutos.",
+  "featureAlertsTitle": "Alertas na hora certa",
+  "featureAlertsText": "Aviso quando a conexão cai ou volta.",
+  "featureCauseText": "Wi-Fi, rota ou servidor, e o melhor horário de uso.",
+  "setupTime": "Leva menos de um minuto para configurar.",
+  "targetStepTitle": "Para onde medir",
+  "targetStepSubtitle": "O destino das conexões de teste. \"Próximo\" usa a menor rota disponível e serve para a maioria.",
+  "alertsStepSubtitle": "Quando o Linkzora deve chamar sua atenção se a conexão cair ou oscilar.",
+  "rhythmStepTitle": "Ritmo das medições",
+  "rhythmStepSubtitle": "Intervalos curtos detectam quedas mais cedo; longos economizam bateria.",
+  "wifiStepTitle": "Nome do Wi-Fi",
+  "wifiStepSubtitle": "Opcional · permissão de localização precisa",
+  "wifiStepNote": "Sem ela, a rede aparece apenas como \"Wi-Fi\". Você pode permitir depois na tela Conexão.",
+  "summaryStepTitle": "Tudo pronto",
+  "summaryStepSubtitle": "Confira as escolhas. Tudo pode ser mudado depois em Ajustes.",
+  "summaryServer": "Servidor",
+  "summaryAlerts": "Alertas",
+  "summaryLimit": "Limite de latência",
+  "wifiNameShown": "Habilitado",
+  "wifiNameHidden": "Oculto",
+  "kindRouter": "Roteador",
+  "kindTv": "TV ou streaming",
+  "kindPhone": "Celular ou tablet",
+  "kindComputer": "Computador",
+  "kindPrinter": "Impressora",
+  "kindConsole": "Console de jogos",
+  "kindSpeaker": "Assistente ou caixa de som",
+  "kindCamera": "Câmera",
+  "kindIot": "Casa inteligente (IoT)",
+  "kindUnknown": "Tipo desconhecido",
+  "deviceUnnamed": "Aparelho .{suffix}",
+  "@deviceUnnamed": {
+    "placeholders": {
+      "suffix": {
+        "type": "Object"
+      }
+    }
+  },
+  "confidence": "{level, select, high{confiança alta} medium{confiança média} other{confiança baixa}}",
+  "@confidence": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "interferenceLevel": "{level, select, high{Interferência alta} medium{Interferência média} other{Interferência baixa}}",
+  "@interferenceLevel": {
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "bandGhz": "{band} GHz",
+  "@bandGhz": {
+    "placeholders": {
+      "band": {
+        "type": "Object"
+      }
+    }
+  },
+  "causeIsp": "Operadora / internet",
+  "causeInterference": "Interferência Wi-Fi",
+  "causeSignal": "Sinal fraco do seu aparelho",
+  "causeUnknown": "Sem causa identificada",
+  "reasonHeavyKind": "{kind}: costuma usar bastante banda",
+  "@reasonHeavyKind": {
+    "placeholders": {
+      "kind": {
+        "type": "Object"
+      }
+    }
+  },
+  "reasonLift": "Instável em {present} das verificações com ele na rede, contra {absent} sem ele",
+  "@reasonLift": {
+    "placeholders": {
+      "present": {
+        "type": "Object"
+      },
+      "absent": {
+        "type": "Object"
+      }
+    }
+  },
+  "reasonNoWorse": "A conexão não piora quando ele está na rede",
+  "reasonAlwaysPresent": "Sempre presente: sem períodos sem ele para comparar",
+  "reasonNoPresence": "Sem histórico de presença ainda",
+  "reasonJoined": "{count, plural, =1{Entrou na rede pouco antes de 1 período de falha} other{Entrou na rede pouco antes de {count} períodos de falha}}",
+  "@reasonJoined": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reasonSlowLocal": "Resposta local lenta ou oscilando ({latency} ms, jitter {jitter} ms)",
+  "@reasonSlowLocal": {
+    "placeholders": {
+      "latency": {
+        "type": "Object"
+      },
+      "jitter": {
+        "type": "Object"
+      }
+    }
+  },
+  "reasonPhonePowerSave": "; celulares em economia de energia respondem devagar, peso reduzido",
+  "reasonNotInLastScan": "Não apareceu no último escaneamento",
+  "pairedNone": "Ainda não há medições do roteador junto das falhas",
+  "pairedGood": "{count, plural, =1{Em 1 falha de {paired} o roteador respondia bem} other{Em {count} falhas de {paired} o roteador respondia bem}}",
+  "@pairedGood": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "paired": {
+        "type": "Object"
+      }
+    }
+  },
+  "nowRouterInternet": "Agora: roteador {router} × internet {internet}",
+  "@nowRouterInternet": {
+    "placeholders": {
+      "router": {
+        "type": "Object"
+      },
+      "internet": {
+        "type": "Object"
+      }
+    }
+  },
+  "ispIncludes": "Inclui a rota até o servidor e o uso intenso da internet da casa",
+  "networksCount": "{count, plural, =1{1 rede} other{{count} redes}}",
+  "@networksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "overlappingCount": "{count, plural, =1{1 sobreposta} other{{count} sobrepostas}}",
+  "@overlappingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "neighborNetworksCount": "{count, plural, =1{1 rede vizinha} other{{count} redes vizinhas}}",
+  "@neighborNetworksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reasonChannels": "{same} no mesmo canal e {overlapping} (canal {channel}, {band})",
+  "@reasonChannels": {
+    "placeholders": {
+      "same": {
+        "type": "Object"
+      },
+      "overlapping": {
+        "type": "Object"
+      },
+      "channel": {
+        "type": "Object"
+      },
+      "band": {
+        "type": "Object"
+      }
+    }
+  },
+  "reasonInterferenceAmong": "{interference} entre {neighbors}",
+  "@reasonInterferenceAmong": {
+    "placeholders": {
+      "interference": {
+        "type": "Object"
+      },
+      "neighbors": {
+        "type": "Object"
+      }
+    }
+  },
+  "reasonFreeChannel": "O canal {channel} está mais livre",
+  "@reasonFreeChannel": {
+    "placeholders": {
+      "channel": {
+        "type": "Object"
+      }
+    }
+  },
+  "reasonNoNeighbors": "Redes vizinhas indisponíveis (permita a localização)",
+  "reasonWeakFailures": "{count, plural, =1{1 falha de {total} com sinal fraco} other{{count} falhas de {total} com sinal fraco}}",
+  "@reasonWeakFailures": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "Object"
+      }
+    }
+  },
+  "reasonSignalNow": "Sinal atual {rssi} dBm ({quality})",
+  "@reasonSignalNow": {
+    "placeholders": {
+      "rssi": {
+        "type": "Object"
+      },
+      "quality": {
+        "type": "Object"
+      }
+    }
+  },
+  "reasonNoInstability": "Nenhuma instabilidade no Wi-Fi nas últimas 24 h",
+  "reasonUnexplained": "{count, plural, =1{1 verificação instável em {total}; parte não tem explicação observável} other{{count} verificações instáveis em {total}; parte não tem explicação observável}}",
+  "@reasonUnexplained": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "Object"
+      }
+    }
+  },
+  "locationNow": " Agora: roteador {router}, internet {internet}.",
+  "@locationNow": {
+    "placeholders": {
+      "router": {
+        "type": "Object"
+      },
+      "internet": {
+        "type": "Object"
+      }
+    }
+  },
+  "locationNoneTitle": "Nenhum problema recente",
+  "locationNoneDetail": "Sem instabilidade no Wi-Fi nas últimas 24 h.{now}",
+  "@locationNoneDetail": {
+    "placeholders": {
+      "now": {
+        "type": "Object"
+      }
+    }
+  },
+  "locationUnknownTitle": "Ainda inconclusivo",
+  "locationUnknownDetail": "Escaneie a rede e mantenha o monitoramento ligado para comparar o roteador com a internet.",
+  "locationLocalTitle": "Rede local (Wi-Fi/casa)",
+  "locationLocalDetail": "O roteador também fica lento ou perde pacotes quando a conexão piora: sinal, interferência ou aparelhos da casa.{now}",
+  "@locationLocalDetail": {
+    "placeholders": {
+      "now": {
+        "type": "Object"
+      }
+    }
+  },
+  "locationIspDetail": "O Wi-Fi até o roteador segue bom quando a conexão piora. O gargalo está depois dele: operadora, rota ou a internet da casa saturada por algum aparelho.{now}",
+  "@locationIspDetail": {
+    "placeholders": {
+      "now": {
+        "type": "Object"
+      }
+    }
+  },
+  "locationMixedTitle": "Dos dois lados",
+  "locationMixedDetail": "Há falhas com o roteador lento e falhas com ele normal.{now}",
+  "@locationMixedDetail": {
+    "placeholders": {
+      "now": {
+        "type": "Object"
+      }
+    }
+  },
+  "scanJustNow": "agora mesmo",
+  "scanMinutesAgo": "há {minutes} min",
+  "@scanMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "Object"
+      }
+    }
+  },
+  "scanTodayAt": "hoje às {time}",
+  "@scanTodayAt": {
+    "placeholders": {
+      "time": {
+        "type": "Object"
+      }
+    }
+  },
+  "scanOnDate": "em {date} {time}",
+  "@scanOnDate": {
+    "placeholders": {
+      "date": {
+        "type": "Object"
+      },
+      "time": {
+        "type": "Object"
+      }
+    }
+  },
+  "sourceHistory": "histórico",
+  "scanPreparing": "Preparando",
+  "scanNeedsWifi": "Conecte o celular a um Wi-Fi para escanear a rede.",
+  "scanFailed": "Não foi possível escanear a rede.",
+  "scanUnavailable": "Escaneamento indisponível",
+  "neighborsHidden": "Redes vizinhas ocultas",
+  "neighborsLocationOff": "Ligue a localização do aparelho: o Android exige isso para listar as redes Wi-Fi vizinhas.",
+  "neighborsPermission": "O Android só mostra as redes vizinhas com a permissão de localização precisa e o app aberto.",
+  "probableContribution": "Contribuição provável",
+  "noMeasurementsLower": "sem medições",
+  "unstableOfTotal": "{unstable}/{total} instáveis em 24 h",
+  "@unstableOfTotal": {
+    "placeholders": {
+      "unstable": {
+        "type": "Object"
+      },
+      "total": {
+        "type": "Object"
+      }
+    }
+  },
+  "devicesOnNetwork": "Aparelhos na rede",
+  "devicesOnNetworkCount": "Aparelhos na rede ({count})",
+  "@devicesOnNetworkCount": {
+    "placeholders": {
+      "count": {
+        "type": "Object"
+      }
+    }
+  },
+  "scannedAgo": "escaneado {age}",
+  "@scannedAgo": {
+    "placeholders": {
+      "age": {
+        "type": "Object"
+      }
+    }
+  },
+  "noScanTitle": "Nenhum escaneamento ainda",
+  "noScanText": "Toque em \"Escanear agora\" para listar os aparelhos conectados ao seu Wi-Fi.",
+  "wifiEnvironment": "Ambiente Wi-Fi",
+  "howToReadTitle": "Como ler estes números",
+  "howToReadMonitoring": "O Android não deixa um app ver o consumo de banda de cada aparelho nem os endereços MAC da rede. Os percentuais são estimativas: cruzam as suas medições com a latência do roteador, as redes vizinhas e quais aparelhos estavam conectados em cada momento (inventário a cada 15 min enquanto o monitoramento está ligado).",
+  "howToReadIdle": "O Android não deixa um app ver o consumo de banda de cada aparelho nem os endereços MAC da rede. Os percentuais são estimativas: cruzam as suas medições com a latência do roteador, as redes vizinhas e quais aparelhos estavam conectados em cada momento. Ligue o monitoramento para registrar a presença dos aparelhos a cada 15 min.",
+  "onlyRouterAndPhone": "Só o roteador e este aparelho responderam.",
+  "whereIsTheProblem": "Onde está o problema",
+  "localNetwork": "Rede local",
+  "provider": "Operadora",
+  "internet": "Internet",
+  "scanNow": "Escanear agora",
+  "lastScan": "Último escaneamento {age}",
+  "@lastScan": {
+    "placeholders": {
+      "age": {
+        "type": "Object"
+      }
+    }
+  },
+  "scanDuration": "{seconds} s",
+  "@scanDuration": {
+    "placeholders": {
+      "seconds": {
+        "type": "Object"
+      }
+    }
+  },
+  "scanning": "Escaneando…",
+  "scanTakesAbout": "Leva cerca de 15 segundos. Mantenha o app aberto.",
+  "networkDevices": "Aparelhos da rede",
+  "largestShare": "Maior parcela: {name} ({percent}%)",
+  "@largestShare": {
+    "placeholders": {
+      "name": {
+        "type": "Object"
+      },
+      "percent": {
+        "type": "Object"
+      }
+    }
+  },
+  "probableLower": "provável",
+  "breakdownExplanation": "Maior contribuição estimada. Os percentuais somam 100% e mostram o peso provável de cada causa, não o consumo de banda.",
+  "yourRouter": "Seu roteador",
+  "thisDevice": "Este aparelho",
+  "localLatency": "local {value}",
+  "@localLatency": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "jitterMs": "jitter {value} ms",
+  "@jitterMs": {
+    "placeholders": {
+      "value": {
+        "type": "Object"
+      }
+    }
+  },
+  "absent": "ausente",
+  "showLess": "Menos",
+  "why": "Por quê?",
+  "onlyKindWeight": "Só o peso do tipo de aparelho; sem outras evidências.",
+  "sources": "Fontes: {list}",
+  "@sources": {
+    "placeholders": {
+      "list": {
+        "type": "Object"
+      }
+    }
+  },
+  "noNeighborsTitle": "Sem dados das redes vizinhas",
+  "noNeighborsScan": "Escaneie a rede para analisar canal, sinal e interferência.",
+  "noNeighborsAndroid": "O Android não liberou a lista de redes Wi-Fi neste escaneamento.",
+  "yourWifi": "Seu Wi-Fi",
+  "cachedData": "dados em cache",
+  "wifiBand": "Faixa",
+  "wifiChannel": "Canal",
+  "neighborsSummary": "{same} no mesmo canal · {partial} sobrepostas · {total} redes vizinhas",
+  "@neighborsSummary": {
+    "placeholders": {
+      "same": {
+        "type": "Object"
+      },
+      "partial": {
+        "type": "Object"
+      },
+      "total": {
+        "type": "Object"
+      }
+    }
+  },
+  "channelTip": "Dica: o canal {channel} está mais livre. Mude nas configurações do roteador.",
+  "@channelTip": {
+    "placeholders": {
+      "channel": {
+        "type": "Object"
+      }
+    }
+  },
+  "diagNoNetwork": "Sem rede ativa no aparelho",
+  "diagCaptivePortal": "Rede exige login (portal cativo)",
+  "diagDns": "Falha ao resolver o endereço do servidor (DNS)",
+  "diagNoInternet": "Rede conectada, mas sem acesso à internet",
+  "diagWeakWifiOffline": "Sinal Wi-Fi fraco demais para manter a conexão",
+  "diagServerNoResponse": "Servidor ou rota sem resposta",
+  "diagWeakWifiStable": "Sinal Wi-Fi fraco, mas conexão estável",
+  "diagNoAnomaly": "Nenhuma anomalia detectada",
+  "@diagNoAnomaly": {
+    "description": "Native diagnosis stored in Portuguese; also used to translate history."
+  },
+  "diagWeakWifi": "Sinal Wi-Fi fraco",
+  "diagPacketLoss": "Perda de pacotes na rota",
+  "diagHighJitter": "Oscilação alta na rota",
+  "diagRegionalDistance": "Distância até {target} influencia a latência",
+  "@diagRegionalDistance": {
+    "placeholders": {
+      "target": {
+        "type": "Object"
+      }
+    }
+  },
+  "diagCongested": "Rota congestionada ou servidor distante",
+  "eventStable": "Conexão estável",
+  "eventUnstable": "Conexão instável",
+  "eventOffline": "Internet indisponível",
+  "eventRestored": "Conexão restabelecida",
+  "eventBackUnstable": "Conexão voltou, mas instável",
+  "eventChecking": "Verificando conexão",
+  "transportMobileData": "Dados móveis",
+  "transportNoNetwork": "Sem rede"
+}

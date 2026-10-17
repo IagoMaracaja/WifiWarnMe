@@ -1,0 +1,4 @@
+<!-- Inner ribbon segment: flat, so neighbouring checks join into one continuous bar. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#FFFFFFFF"/>
+</shape>
