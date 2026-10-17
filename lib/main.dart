@@ -721,23 +721,29 @@ class _HomeState extends State<Home>
           position: Tween<Offset>(
                   begin: Offset(.04 * tabDirection, 0), end: Offset.zero)
               .animate(curve),
-          // Builders give each page the body context, whose padding holds
-          // the floating tab bar (see _tabPagePadding).
-          child: IndexedStack(
-            index: selectedTab,
-            children: [
-              Builder(builder: monitorPage),
-              Builder(builder: analyticsPage),
-              Builder(builder: historyPage),
-              Builder(
-                builder: (_) => _DevicesPage(
-                  measurements: measurements,
-                  // Scans only start once the tab is first opened.
-                  visible: selectedTab == 3,
-                  monitoring: enabled,
+          // Opaque fill inside the fading layer: pages only paint their cards,
+          // and on some Android GPUs (Impeller/Vulkan) the transparent parts of
+          // the offscreen layer show uncleared memory as static while fading.
+          child: ColoredBox(
+            color: p.bg,
+            // Builders give each page the body context, whose padding holds
+            // the floating tab bar (see _tabPagePadding).
+            child: IndexedStack(
+              index: selectedTab,
+              children: [
+                Builder(builder: monitorPage),
+                Builder(builder: analyticsPage),
+                Builder(builder: historyPage),
+                Builder(
+                  builder: (_) => _DevicesPage(
+                    measurements: measurements,
+                    // Scans only start once the tab is first opened.
+                    visible: selectedTab == 3,
+                    monitoring: enabled,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
