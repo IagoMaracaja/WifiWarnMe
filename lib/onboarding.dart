@@ -224,9 +224,12 @@ class _OnboardingState extends State<_Onboarding> {
           height: 44,
           child: Row(
             children: [
-              AnimatedOpacity(
-                duration: const Duration(milliseconds: 200),
-                opacity: step == 0 ? 0 : 1,
+              // Hidden on the first step, keeping its space (no opacity layer).
+              Visibility(
+                visible: step != 0,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
                 child: IconButton(
                   tooltip: l.back,
                   onPressed: step == 0 ? null : () => goTo(step - 1),

@@ -579,9 +579,12 @@ class _ServerDropdownState extends State<_ServerDropdown>
                   child: GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: close,
-                    child: FadeTransition(
-                      opacity: animation,
-                      child: ColoredBox(color: p.bg.withValues(alpha: .45)),
+                    // The scrim colour itself animates: a fading full-screen
+                    // layer showed static on a Galaxy Z Fold.
+                    child: AnimatedBuilder(
+                      animation: animation,
+                      builder: (context, _) => ColoredBox(
+                          color: p.bg.withValues(alpha: .45 * animation.value)),
                     ),
                   ),
                 ),
@@ -591,16 +594,13 @@ class _ServerDropdownState extends State<_ServerDropdown>
                   offset: const Offset(0, 72),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: FadeTransition(
-                      opacity: animation,
-                      child: SizeTransition(
-                        sizeFactor: CurvedAnimation(
-                            parent: animation, curve: Curves.easeOutCubic),
-                        axisAlignment: -1,
-                        child: Material(
-                          color: Colors.transparent,
-                          child: _menu(constraints.maxWidth, current),
-                        ),
+                    child: SizeTransition(
+                      sizeFactor: CurvedAnimation(
+                          parent: animation, curve: Curves.easeOutCubic),
+                      axisAlignment: -1,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: _menu(constraints.maxWidth, current),
                       ),
                     ),
                   ),

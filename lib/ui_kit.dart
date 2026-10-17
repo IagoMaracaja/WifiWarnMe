@@ -642,11 +642,17 @@ class _GlassBox extends StatelessWidget {
     required this.radius,
     this.padding = EdgeInsets.zero,
     this.tint,
+    this.blur = true,
   });
 
   final Widget child;
   final double radius;
   final EdgeInsetsGeometry padding;
+
+  /// Blur what is behind. Only worth it over moving content (the tab bar):
+  /// the top bar sits on the plain background, where a backdrop blur shows
+  /// nothing and, on some Android GPUs (Galaxy Z Fold), drew static instead.
+  final bool blur;
 
   /// Optional state colour that tints the border and the fill.
   final Color? tint;
@@ -667,8 +673,8 @@ class _GlassBox extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: shape,
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: _MaybeBlur(
+          enabled: blur,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             padding: padding,
@@ -694,6 +700,20 @@ class _GlassBox extends StatelessWidget {
   }
 }
 
+/// [BackdropFilter] blur when [enabled], the bare child otherwise.
+class _MaybeBlur extends StatelessWidget {
+  const _MaybeBlur({required this.enabled, required this.child});
+
+  final bool enabled;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => enabled
+      ? BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18), child: child)
+      : child;
+}
+
 /// Square glass button of the top bar.
 class _TopBarButton extends StatelessWidget {
   const _TopBarButton({
@@ -714,6 +734,7 @@ class _TopBarButton extends StatelessWidget {
           label: tooltip,
           child: _GlassBox(
             radius: 14,
+            blur: false,
             child: Material(
               color: Colors.transparent,
               child: InkWell(
@@ -760,6 +781,7 @@ class _LiveStatus extends StatelessWidget {
   Widget build(BuildContext context) => _GlassBox(
         radius: 14,
         tint: color,
+        blur: false,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -809,16 +831,14 @@ class _LiveStatus extends StatelessWidget {
             AnimatedSize(
               duration: const Duration(milliseconds: 250),
               curve: Curves.easeOutCubic,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 250),
-                child: Text(label,
-                    key: ValueKey(label),
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: color,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w900)),
-              ),
+              // Swapped without a fade (no offscreen layer in the top bar).
+              child: Text(label,
+                  key: ValueKey(label),
+                  maxLines: 1,
+                  style: TextStyle(
+                      color: color,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900)),
             ),
           ],
         ),

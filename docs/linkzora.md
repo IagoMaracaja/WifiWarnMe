@@ -25,8 +25,8 @@ Os padrões vêm pré-selecionados (Próximo · Cloudflare, a cada mudança, 2 m
 
 ### Navegação e aparência
 
-- **Barra superior**: ícone, "Linkzora" e o subtítulo da aba (troca com animação). À direita, uma pílula de estado ao vivo: o ponto tem a cor do estado e pulsa a cada nova medição; o texto mostra o estado ("Estável", "Instável", "Sem resposta", "Medindo", "Pausado") na aba Conexão, que já exibe a latência no anel, e a latência nas demais abas. Depois vem o botão de Ajustes. Sob a barra, um degradê suaviza o conteúdo que rola por baixo.
-- **Abas** (Conexão, Monitoria, Eventos): barra flutuante de vidro com uma cápsula de destaque que desliza até a aba escolhida e um traço com o gradiente da marca acima do ícone. O conteúdo rola por baixo da barra, mas o fim de cada página sempre pode subir inteiro acima dela (veja "Páginas sob a barra de abas" em Padrão visual). Cada troca de aba entra com fade e um leve deslize na direção da aba.
+- **Barra superior**: ícone, "Linkzora" e o subtítulo da aba (troca direta, sem esmaecer). À direita, uma pílula de estado ao vivo: o ponto tem a cor do estado e pulsa a cada nova medição; o texto mostra o estado ("Estável", "Instável", "Sem resposta", "Medindo", "Pausado") na aba Conexão, que já exibe a latência no anel, e a latência nas demais abas. Depois vem o botão de Ajustes. Sob a barra, um degradê suaviza o conteúdo que rola por baixo.
+- **Abas** (Conexão, Monitoria, Eventos): barra flutuante de vidro com uma cápsula de destaque que desliza até a aba escolhida e um traço com o gradiente da marca acima do ícone. O conteúdo rola por baixo da barra, mas o fim de cada página sempre pode subir inteiro acima dela (veja "Páginas sob a barra de abas" em Padrão visual). Cada troca de aba entra com um leve deslize na direção da aba, sem fade: a página e o fundo (inclusive atrás da barra superior) são opacos, porque esmaecer a página inteira a desenha numa camada temporária, que num Galaxy Z Fold mostrava chiado nas áreas vazias.
 - **Modo noturno**: ligado por padrão. Liga e desliga pelo item "Modo noturno" em Ajustes (saiu da barra superior para o subtítulo caber); vale na hora, com transição animada das cores, e fica salvo (chave `darkMode`). A splash, a configuração inicial e os ícones das barras de status e de navegação do sistema seguem a escolha.
 
 ### Tela Conexão
@@ -363,6 +363,8 @@ Versões de teste vão pelo **Firebase App Distribution**, projeto `linkzora-app
 Métodos do canal: `status` (com `knownCheckedAt`), `start`, `configure`, `probe`, `checkNow`, `stop`, `requestWifiName`, `setLanguage` e, da aba Rede, `scanNetwork`, `scanProgress` e `deviceHistory`.
 
 ### Padrão visual
+
+**Sem camadas temporárias grandes.** Num Galaxy Z Fold (Impeller/Vulkan), esmaecer uma área grande (`FadeTransition`, `AnimatedOpacity`) ou desfocar o fundo (`BackdropFilter`) mostrava chiado de TV nas áreas sem pintura própria. Por isso: a troca de tela (splash, configuração, início) e de aba não esmaece; o subtítulo e a pílula de estado trocam o texto direto; o véu do menu de servidor anima a própria cor; o botão Voltar da configuração some com `Visibility`; e o desfoque de vidro (`_GlassBox`, `blur`) fica só na barra de abas, a única que passa sobre conteúdo. Fundos ficam opacos, inclusive atrás da barra superior.
 
 Nenhuma cor fica fixa nos widgets: todas vêm de `LinkzoraPalette` (`lib/palette.dart`), um `ThemeExtension` com as variantes `LinkzoraPalette.dark` e `LinkzoraPalette.light`. Os widgets leem a paleta com `context.palette` (fora do `Linkzora`, como em testes que montam só a `Home`, ela cai na variante escura). Como a paleta viaja no tema, o `lerp` dela anima todas as cores na troca de modo. A paleta também gera o `ThemeData` (`palette.theme`) e o estilo das barras do sistema (`palette.overlayStyle`).
 
