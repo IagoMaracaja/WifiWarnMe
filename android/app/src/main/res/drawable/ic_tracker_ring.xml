@@ -1,0 +1,6 @@
+<!-- Linkzora ring used as the ProgressStyle tracker icon (Android 16). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FF0E1A26" android:pathData="M12,1a11,11 0,1 0,0.01 0Z"/>
+    <path android:strokeColor="#FF20E3A2" android:strokeWidth="2.8" android:strokeLineCap="round" android:fillColor="#00000000" android:pathData="M18.928,8A8,8 0,1 1,12,4"/>
+    <path android:fillColor="#FF20E3A2" android:pathData="M12,9.6a2.4,2.4 0,1 1,-0.01 0Z"/>
+</vector>

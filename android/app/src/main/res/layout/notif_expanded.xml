@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Expanded monitor notification (below Android 16), after design/notificacao/notificacao-redesign.png.
+     The system header (icon, Linkzora, server, time) and the action buttons come from
+     DecoratedCustomViewStyle. Colours are set from MonitorNotificationViews per state. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/notif_card"
+    android:orientation="vertical"
+    android:padding="4dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/notif_panel">
+
+        <ImageView
+            android:id="@+id/notif_glow"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/notif_glow" />
+
+        <ImageView
+            android:id="@+id/notif_accent"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
+            android:importantForAccessibility="no"
+            android:scaleType="fitXY"
+            android:src="@drawable/notif_accent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="14dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="10dp">
+
+            <!-- Network, connection type and the state pill. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <FrameLayout
+                    android:layout_width="34dp"
+                    android:layout_height="34dp">
+                    <ImageView
+                        android:id="@+id/notif_tile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/notif_tile" />
+                    <ImageView
+                        android:id="@+id/notif_icon"
+                        android:layout_width="19dp"
+                        android:layout_height="19dp"
+                        android:layout_gravity="center"
+                        android:importantForAccessibility="no"
+                        android:src="@drawable/ic_monitor_wifi" />
+                </FrameLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/notif_network"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="@color/card_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/notif_subtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:ellipsize="end"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="@color/notif_muted"
+                        android:textSize="11.5sp" />
+                </LinearLayout>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp">
+                    <ImageView
+                        android:id="@+id/notif_pill_bg"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/notif_pill" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="8dp"
+                        android:paddingTop="5dp"
+                        android:paddingEnd="10dp"
+                        android:paddingBottom="5dp">
+                        <ImageView
+                            android:id="@+id/notif_pill_dot"
+                            android:layout_width="7dp"
+                            android:layout_height="7dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/monitor_circle" />
+                        <TextView
+                            android:id="@+id/notif_pill"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- Latency in large type, and the last checks as bars against the limit. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/notif_latency"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:letterSpacing="-0.04"
+                            android:maxLines="1"
+                            android:textColor="@color/card_text"
+                            android:textSize="40sp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/notif_latency_unit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginBottom="4dp"
+                            android:includeFontPadding="false"
+                            android:text="ms"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/notif_caption"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:includeFontPadding="false"
+                        android:maxLines="2"
+                        android:textColor="@color/notif_muted"
+                        android:textSize="10.5sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/notif_chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:importantForAccessibility="no"
+                        android:scaleType="fitXY" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/notif_axis_start"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:textColor="@color/notif_axis"
+                            android:textSize="9.5sp" />
+                        <TextView
+                            android:id="@+id/notif_axis_end"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:textColor="@color/notif_axis"
+                            android:textSize="9.5sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Jitter · loss · signal. -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/notif_line" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="2dp"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp">
+                    <TextView
+                        android:id="@+id/notif_jitter_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/notif_muted"
+                        android:textSize="10.5sp" />
+                    <TextView
+                        android:id="@+id/notif_jitter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/notif_line" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="12dp"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp">
+                    <TextView
+                        android:id="@+id/notif_loss_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/notif_muted"
+                        android:textSize="10.5sp" />
+                    <TextView
+                        android:id="@+id/notif_loss"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/notif_line" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingStart="12dp"
+                    android:paddingTop="7dp"
+                    android:paddingBottom="7dp">
+                    <TextView
+                        android:id="@+id/notif_signal_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/notif_muted"
+                        android:textSize="10.5sp" />
+                    <TextView
+                        android:id="@+id/notif_signal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="@color/card_text"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:importantForAccessibility="no"
+                android:src="@drawable/notif_line" />
+
+            <!-- Probable cause, in a sentence. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/notif_diag_icon"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/ic_diag_ok" />
+                <TextView
+                    android:id="@+id/notif_diagnosis"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:includeFontPadding="false"
+                    android:maxLines="1"
+                    android:textColor="@color/notif_soft"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- When it was measured, and the countdown to the next check. -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="2dp">
+        <TextView
+            android:id="@+id/notif_measured"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="@color/notif_muted"
+            android:textSize="11sp" />
+        <Chronometer
+            android:id="@+id/notif_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:textColor="@color/notif_muted"
+            android:textSize="11sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -177,15 +177,14 @@ Um cartão com uma xícara (ícone com vapor), a mensagem "Gostando do app? Que 
 
 ### Notificações
 
-- **Notificação fixa** (exigida pelo Android para o serviço em primeiro plano):
-  - cabeçalho do sistema com o ícone na cor do estado, "Linkzora", o servidor e a contagem regressiva até a próxima verificação;
-  - até o Android 15 (API < 36), o conteúdo é um **cartão escuro próprio** (`MonitorNotificationViews.kt` + `res/layout/notification_monitor_*.xml`), com fundo `#0E1A26` que fica igual com a aba de notificações clara ou escura:
-    - recolhida (~48 dp): ícone do transporte (Wi-Fi, dados móveis, Ethernet ou sem rede) num bloco na cor do estado, nome da rede, estado e latência;
-    - expandida: nome da rede, estado ("Conectado", "Instável", "Sem internet" ou "Verificando…") com subtítulo ("Internet estável", a causa provável quando instável, "Sem resposta"), caixa com **Ping** e **Jitter**, faixa com as **últimas 12 verificações do servidor atual** (verde, amarelo ou vermelho; cinza onde ainda não há medição), **Perda** e horário da **última medição**;
-    - a faixa é uma **linha contínua** com brilho na cor do estado mais recente: os 12 trechos não têm espaço entre si e só as pontas externas são arredondadas, então verificações seguidas no mesmo estado formam um bloco único (tudo verde = uma linha verde sólida);
-    - o cartão **não usa ícone grande** à direita (nem na primeira notificação "Verificando…"), para ocupar toda a largura; o espaço que sobra à direita da versão recolhida é a coluna do botão de expandir, reservada pelo próprio Android 12+;
-    - textos, cores e a faixa vêm de `MonitorCard.kt`, sem dependências do Android;
-  - no Android 16+ (API 36) usa o modelo padrão do sistema e é solicitada como **Live Update**, com a latência no chip da barra de status. O Android só promove notificações sem layout personalizado, por isso o cartão não é usado nessa versão. Só nesse modelo padrão aparece o ícone grande do app;
+- **Notificação fixa** (exigida pelo Android para o serviço em primeiro plano), desenhada em `design/notificacao/notificacao-redesign.png` (fonte em `notif.html`): o estado e a latência primeiro, o histórico como gráfico, os detalhes depois.
+  - **Cabeçalho do sistema**: ícone na cor do estado, "Linkzora", o servidor e o horário da medição.
+  - **Até o Android 15 (API < 36)**: cartão escuro próprio (`MonitorNotificationViews.kt` + `res/layout/notif_expanded.xml` e `notif_collapsed.xml`), igual com a aba de notificações clara ou escura e sem ícone grande à direita:
+    - **expandida**: bloco com o ícone do transporte (Wi-Fi riscado quando sem resposta), nome da rede, "Wi-Fi 5 GHz · sinal bom" (ou "conectado sem internet") e a pílula do estado (**Estável**, **Instável**, **Sem resposta**); a **latência grande** com a unidade na cor do estado e "latência · limite 300 ms" (ou "0 de 5 conexões · limite 300 ms"); à direita, um **gráfico de barras das últimas 12 verificações** do servidor atual com a **linha tracejada do limite**, a barra mais recente com brilho e, para quem não respondeu, um toco vermelho sobre uma coluna apagada; a linha **Jitter · Perda · Sinal (dBm)**, com o jitter em amarelo quando instável e a perda na cor do problema; a **causa provável numa frase** com ícone ("Estável, sem problemas há 22 min.", "Rota congestionada ou servidor distante.", "Servidor ou rota sem resposta há 16 min."); e o rodapé "Medido às HH:mm" com a contagem regressiva "Próxima em mm:ss";
+    - **recolhida** (~48 dp): ícone, nome da rede, "Estável · Wi-Fi 5 GHz", a tira das 12 verificações e a latência na cor do estado;
+    - o gráfico e a tira são desenhados num bitmap (`ChartBitmaps`), porque `RemoteViews` não desenha; densidade limitada a 2× para manter a notificação leve;
+    - textos, cores e a escala do gráfico vêm de `NotificationCard.kt` (`NotificationFormat`, `ChartScale`), sem tipos do Android.
+  - **Android 16+ (API 36)**: modelo do sistema com **`ProgressStyle`**, para continuar promovida a **Live Update** (o Android não promove layouts próprios): título "Conexão estável · 81 ms", a causa e "Jitter · perda · Wi-Fi sinal", **12 segmentos**, um por verificação, e o anel do app como *tracker icon*; a latência vai para o **chip da barra de status** (`setShortCriticalText`). As cores pedidas para os segmentos são aplicadas pelo sistema quando a notificação é exibida promovida; na aba de notificações o Android 16 do emulador desenha a barra na cor de destaque do tema.
   - botões **Verificar agora** e **Pausar**;
   - usa um canal silencioso de importância padrão com visibilidade pública, para aparecer na tela de bloqueio.
 - **Alertas de mudança** (canal de alta importância):
@@ -201,9 +200,10 @@ Dois widgets nativos de tela inicial (`AppWidgetProvider` + `RemoteViews`, em `M
 
 | Widget | Tamanho | Conteúdo |
 |---|---|---|
-| **Estado da conexão** (`LinkzoraSmallWidget`) | 2×1, redimensionável (mín. 110×40 dp) | Bloco com o ícone do transporte na cor do estado, nome da rede e, ao lado do ponto colorido, a latência (ou o estado, quando não há latência) seguida do estado. |
-| **Monitor da conexão** (`LinkzoraLargeWidget`) | 4×2, redimensionável (mín. 200×110 dp) | Versão compacta: bloco do Wi-Fi, nome da rede, estado e causa provável numa linha, botão de **verificar agora**, faixa contínua das últimas 12 verificações do servidor atual, Ping, Jitter e "Última medição HH:mm". A partir de ~250 dp de altura (4×3) mostra o cartão completo da notificação (caixa de Ping/Jitter, faixa, Perda e última medição) com o mesmo botão. |
+| **Estado da conexão** (`LinkzoraSmallWidget`) | 2×1, redimensionável (mín. 110×40 dp) | Ícone do app, nome do Wi-Fi e, ao lado do ponto colorido, a latência (ou o estado, quando não há latência) seguida do estado. |
+| **Monitor da conexão** (`LinkzoraLargeWidget`) | 4×2, redimensionável (mín. 200×110 dp) | Versão compacta: ícone do app, nome do Wi-Fi, estado e causa provável numa linha, botão de **verificar agora**, faixa contínua das últimas 12 verificações do servidor atual, Ping, Jitter e "Última medição HH:mm". A partir de ~250 dp de altura (4×3) mostra o cartão completo da notificação (caixa de Ping/Jitter, faixa, Perda e última medição) com o mesmo botão. |
 
+- **Nome do Wi-Fi**: o Android só revela o SSID a um serviço iniciado com o app visível (tipo `location`). Quando o serviço volta sozinho (boot, atualização), o último nome é reutilizado apenas se a rede for a mesma (mesmo id de rede do Android), e o serviço renova o tipo `location` assim que o app é aberto.
 - **Toque**: o cartão abre o app. O botão de atualizar envia `CHECK_NOW` ao serviço, que mede na hora.
 - **Monitoramento desligado**: o estado fica cinza, "Pausado" / "Monitoramento pausado"; os últimos valores continuam visíveis como histórico e o botão de atualizar vira **Abrir app** (abrir o app retoma o monitoramento quando ele estava ligado). Uma medição avulsa (`probe`) também conta como pausado. Sem nenhuma medição ainda, aparece "Verificando…".
 - **Atualização**: o `MonitorService` chama `MonitorWidgets.update` depois de publicar cada verificação, ao ligar (`start`/`configure`/`probe`) e ao desligar; o app chama ao trocar o idioma. O `updatePeriodMillis` de 30 min é só reserva (processo encerrado, monitoramento desligado). O trabalho roda numa thread própria, porque a faixa lê `measurements.jsonl`.
@@ -315,6 +315,16 @@ A arte é um radar num quadrado arredondado azul-marinho (varredura verde, ponto
 | Notificações | `drawable/ic_linkzora_notification.xml`: radar monocromático (anel externo, anel interno, mira, varredura e ponto) legível em 24 dp |
 | Flutter (splash, barra superior, configuração inicial) | `assets/brand/linkzora_icon.png` (512 px) |
 
+## Distribuição
+
+Versões de teste vão pelo **Firebase App Distribution**, projeto `linkzora-app` (app `1:551246781244:android:0c1afa5ff117aec6ab1c39`), grupo de testadores `testers`.
+
+- **Pipeline** (`.github/workflows/distribute.yml`): a cada push em `master` e sob demanda (com notas opcionais), roda os testes, gera o APK de release assinado, com número de build igual à contagem de commits, e publica para o grupo `testers` com a mensagem do commit como nota.
+- **CI** (`.github/workflows/android.yml`): em PRs e pushes em `master`, roda `flutter analyze`, `flutter test`, os testes JVM e gera o APK de debug.
+- **Assinatura**: `android/app/build.gradle.kts` lê `android/key.properties` e `android/app/linkzora-release.jks`, ambos fora do git. Sem eles, o release cai na chave de debug. No CI, eles são recriados a partir dos secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD` e `ANDROID_KEY_ALIAS`. **A mesma chave precisa assinar todas as versões**, senão os testadores não conseguem atualizar; guarde uma cópia do `.jks` e da senha.
+- **Credencial do Firebase**: o secret `FIREBASE_SERVICE_ACCOUNT` guarda a chave JSON de uma conta de serviço com o papel *Firebase App Distribution Admin*. Para criá-la: Console do Google Cloud → projeto `linkzora-app` → IAM e administrador → Contas de serviço → Criar → papel *Firebase App Distribution Admin* → Chaves → Adicionar chave → JSON; depois `gh secret set FIREBASE_SERVICE_ACCOUNT < chave.json`.
+- **Publicação manual**: `flutter build apk --release` e `firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app <app id> --groups testers --project linkzora-app`.
+
 ## Arquitetura do código
 
 | Arquivo | Papel |
@@ -332,8 +342,10 @@ A arte é um radar num quadrado arredondado azul-marinho (varredura verde, ponto
 | `ConnectionMath.kt` | Estatísticas e diagnóstico, sem dependências do Android. |
 | `JsonLinesStore.kt` | Histórico em JSON lines com retenção por idade e teto de entradas (medições e eventos). |
 | `EventLog.kt` | Eventos da aba Eventos sobre o `JsonLinesStore`, formato da linha e migração dos eventos antigos. |
-| `MonitorCard.kt` | Textos, cores e faixa de estados da notificação fixa, sem dependências do Android. |
-| `MonitorNotificationViews.kt` | Layouts personalizados (RemoteViews) da notificação fixa abaixo do Android 16; os binders também servem aos widgets. |
+| `MonitorCard.kt` | Textos, cores e faixa de estados do cartão dos widgets, sem dependências do Android. |
+| `NotificationCard.kt` | Modelo da notificação fixa redesenhada: pílula, legenda, causa em frase, barras e escala do gráfico, sem dependências do Android. |
+| `BootReceiver.kt` | Retoma o monitoramento depois de reiniciar o aparelho ou atualizar o app. |
+| `MonitorNotificationViews.kt` | Layouts personalizados (RemoteViews) da notificação fixa abaixo do Android 16 e o desenho do gráfico (`ChartBitmaps`); os binders antigos servem aos widgets. |
 | `MonitorWidgets.kt` | Widgets de tela inicial (`LinkzoraSmallWidget`, `LinkzoraLargeWidget`) e a atualização deles. |
 | `NativeLocale.kt` | Idioma dos textos nativos (`setLanguage`, contexto localizado) e `NativeText`, que traduz diagnóstico, cartão e destinos. |
 | `AppLanguage.kt` | Regras puras do idioma: códigos aceitos, padrão do sistema e `Locale`. |
@@ -386,6 +398,7 @@ cd android && ./gradlew :app:testDebugUnitTest          # cálculos e armazename
   - Leitura do escaneamento e do histórico, arredondamento que soma 100, presença por inventário, comparação presente/ausente, entrada antes de falhas e carga local.
   - Cenários: operadora (roteador bom), rede local (roteador lento e canal cheio), sinal fraco, aparelho correlacionado com as falhas, aparelhos só no histórico, verificações fora do Wi-Fi e teto dos pesos por tipo.
 - `ConnectionMathTest.kt`: mediana, jitter, retransmissão, perda, classificação, códigos de diagnóstico (estáveis, sem repetição) e a dedução do código pelos textos antigos.
+- `NotificationCardTest.kt`: cartão estável, instável e sem resposta como no desenho, frase da causa e há quanto tempo, barras das últimas verificações, faixa do Wi-Fi e escala do gráfico.
 - `MonitorCardTest.kt`: textos (no idioma recebido) e cores por estado, nome da rede, formatação das métricas e faixa das últimas verificações por servidor.
 - `WidgetFormatTest.kt`: cartão dos widgets monitorando, instável, sem internet, pausado e sem nenhuma medição, e o texto do widget pequeno.
 - `AppLanguageTest.kt`: códigos de idioma e padrão do sistema; os três `strings.xml` têm as mesmas chaves e os mesmos marcadores (`%1$s`, `%1$d`), todo código de diagnóstico tem texto, e o português bate com o usado nos testes e na dedução dos textos antigos.
