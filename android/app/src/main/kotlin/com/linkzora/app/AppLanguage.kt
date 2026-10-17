@@ -1,4 +1,4 @@
-package com.wifiwarnme.app
+package com.linkzora.app
 
 /**
  * Languages of the native texts (notification, alerts, events, widgets), without Android types so

@@ -317,7 +317,9 @@ A arte é um radar num quadrado arredondado azul-marinho (varredura verde, ponto
 
 ## Distribuição
 
-Versões de teste vão pelo **Firebase App Distribution**, projeto `linkzora-app` (app `1:551246781244:android:0c1afa5ff117aec6ab1c39`), grupo de testadores `testers`.
+O identificador do app é `com.linkzora.app` (pacote Kotlin `com.linkzora.app`). Até 2026-10-17 ele era `com.wifiwarnme.app`; como o Android trata IDs diferentes como apps diferentes, quem tinha a versão antiga precisa desinstalá-la uma vez. Os nomes internos (canal `wifiwarnme/monitor`, preferências `wifiwarnme_native`, ações do serviço) foram mantidos.
+
+Versões de teste vão pelo **Firebase App Distribution**, projeto `linkzora-app` (app `1:551246781244:android:9c1186ae26bb9af4ab1c39`), grupo de testadores `testers`.
 
 - **Pipeline** (`.github/workflows/distribute.yml`): a cada push em `master` e sob demanda (com notas opcionais), roda os testes, gera o APK de release assinado, com número de build igual à contagem de commits, e publica para o grupo `testers` com a mensagem do commit como nota.
 - **CI** (`.github/workflows/android.yml`): em PRs e pushes em `master`, roda `flutter analyze`, `flutter test`, os testes JVM e gera o APK de debug.

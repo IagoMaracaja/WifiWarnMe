@@ -17,7 +17,7 @@ concurrency:
   group: distribute
   cancel-in-progress: true
 env:
-  FIREBASE_APP_ID: '1:551246781244:android:0c1afa5ff117aec6ab1c39'
+  FIREBASE_APP_ID: '1:551246781244:android:9c1186ae26bb9af4ab1c39'
   TESTER_GROUPS: testers
 jobs:
   distribute:

@@ -5,7 +5,6 @@ Datas no formato AAAA-MM-DD.
 
 ## To do
 
-- [ ] Validar o primeiro envio automático do `distribute.yml` depois do merge do PR #1 em `master` (o GitHub só roda workflows manuais que já existam na branch principal).
 
 ## Doing
 
@@ -19,6 +18,8 @@ Datas no formato AAAA-MM-DD.
 - [x] Pipeline de distribuição pelo Firebase App Distribution: projeto `linkzora-app`, grupo `testers`, workflow `distribute.yml`, assinatura de release fixa e primeira versão publicada.
 - [x] CI atualizado (`android.yml`): não roda mais `flutter create` sobre o projeto; roda análise, testes Flutter e JVM e gera o APK.
 - [x] Conta de serviço `github-distribution` no projeto `linkzora-app` com o papel Firebase App Distribution Admin; chave salva no secret `FIREBASE_SERVICE_ACCOUNT` (cópia local apagada).
+- [x] PR #2 mergeado; primeiro envio automático do `distribute.yml` publicado no grupo `testers` (a chave da conta de serviço foi recriada: a primeira tinha sido corrompida pela codificação do PowerShell e foi revogada).
+- [x] Trocar o identificador do app para `com.linkzora.app` (pacote Kotlin, Gradle e um novo app no Firebase App Distribution), antes de qualquer publicação na Play Store.
 - [x] Atualizar as documentações com o que foi feito nas últimas iterações e nesta.
 - [x] Corrigir bugs de fluxo, contexto, UI, strings e localizações faltantes; atualizar testes: nome do Wi-Fi sumindo quando o serviço volta sozinho (boot/atualização), legenda da notificação cortada, "Sem conexão" repetido, resumo do setup inicial cortado; traduções ES/EN conferidas (nenhuma chave faltando, Flutter e nativo); testes do novo cartão (`NotificationCardTest`). *(último, menos prioritário)*
 
