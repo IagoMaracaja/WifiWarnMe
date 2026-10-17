@@ -711,66 +711,71 @@ class _HomeState extends State<Home>
     return Scaffold(
       // Pages scroll under the floating tab bar.
       extendBody: true,
+      // Explicit background behind the status bar and the top bar: on some
+      // Android GPUs (seen on a Galaxy Z Fold, Impeller/Vulkan) areas left to
+      // the Scaffold showed static while the tab transition ran.
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(72),
-        child: topBar(),
+        child: ColoredBox(color: p.bg, child: topBar()),
       ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: FadeTransition(
-              opacity: curve,
-              child: SlideTransition(
-                position: Tween<Offset>(
-                        begin: Offset(.04 * tabDirection, 0), end: Offset.zero)
-                    .animate(curve),
-                // Opaque fill inside the fading layer: pages only paint their cards,
-                // and on some Android GPUs (Impeller/Vulkan) the transparent parts of
-                // the offscreen layer show uncleared memory as static while fading.
-                child: ColoredBox(
-                  color: p.bg,
-                  // Builders give each page the body context, whose padding holds
-                  // the floating tab bar (see _tabPagePadding).
-                  child: IndexedStack(
-                    index: selectedTab,
-                    children: [
-                      Builder(builder: monitorPage),
-                      Builder(builder: analyticsPage),
-                      Builder(builder: historyPage),
-                      Builder(
-                        builder: (_) => _DevicesPage(
-                          measurements: measurements,
-                          // Scans only start once the tab is first opened.
-                          visible: selectedTab == 3,
-                          monitoring: enabled,
+      // No opacity on the whole page: a fading page is drawn into an offscreen
+      // layer, and that is where the static came from. The tab change is a
+      // short slide of an opaque page over an opaque background instead.
+      body: ColoredBox(
+        color: p.bg,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ClipRect(
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                          begin: Offset(.04 * tabDirection, 0), end: Offset.zero)
+                      .animate(curve),
+                  child: ColoredBox(
+                    color: p.bg,
+                    // Builders give each page the body context, whose padding holds
+                    // the floating tab bar (see _tabPagePadding).
+                    child: IndexedStack(
+                      index: selectedTab,
+                      children: [
+                        Builder(builder: monitorPage),
+                        Builder(builder: analyticsPage),
+                        Builder(builder: historyPage),
+                        Builder(
+                          builder: (_) => _DevicesPage(
+                            measurements: measurements,
+                            // Scans only start once the tab is first opened.
+                            visible: selectedTab == 3,
+                            monitoring: enabled,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          // Soft edge under the top bar, so content scrolling up fades out
-          // instead of being cut mid-line. Painted on top, outside the fade.
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 20,
-            child: IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [p.bg, p.bg.withValues(alpha: 0)],
+            // Soft edge under the top bar, so content scrolling up fades out
+            // instead of being cut mid-line. Painted on top of the sliding page.
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 20,
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [p.bg, p.bg.withValues(alpha: 0)],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       bottomNavigationBar: _TabBar(
         key: const ValueKey('tab-bar'),
@@ -802,33 +807,19 @@ class _HomeState extends State<Home>
                           fontSize: 20,
                           fontWeight: FontWeight.w900,
                           letterSpacing: -.4)),
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 280),
-                    layoutBuilder: (current, previous) => Stack(
-                      alignment: Alignment.centerLeft,
-                      children: [...previous, if (current != null) current],
-                    ),
-                    transitionBuilder: (child, animation) => FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                                begin: const Offset(0, .4), end: Offset.zero)
-                            .animate(animation),
-                        child: child,
-                      ),
-                    ),
-                    child: Text(
-                      switch (selectedTab) {
-                        0 => l.subtitleConnection,
-                        1 => l.subtitleMonitoring,
-                        2 => l.subtitleEvents,
-                        _ => l.subtitleNetwork,
-                      },
-                      key: ValueKey(selectedTab),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(color: p.muted, fontSize: 12),
-                    ),
+                  // Changes without a fade: fading text is drawn in an
+                  // offscreen layer, which showed static on a Galaxy Z Fold.
+                  Text(
+                    switch (selectedTab) {
+                      0 => l.subtitleConnection,
+                      1 => l.subtitleMonitoring,
+                      2 => l.subtitleEvents,
+                      _ => l.subtitleNetwork,
+                    },
+                    key: ValueKey(selectedTab),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: p.muted, fontSize: 12),
                   ),
                 ],
               ),
