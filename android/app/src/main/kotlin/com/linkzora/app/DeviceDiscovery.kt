@@ -354,18 +354,35 @@ object LanStats {
      * Round-trip summary of LAN probes: median, RFC 3550-style jitter and loss. Unlike the
      * internet check, slow replies are not counted as SYN retransmissions: Wi-Fi clients in
      * power save legitimately answer hundreds of ms late.
+     *
+     * A lone late reply would make up most of the jitter (4, 6, 900, 5 ms gives ~600 ms of
+     * jitter on a 5 ms median), so jitter leaves out spikes when they are a small minority;
+     * when spikes are frequent the device really oscillates and they are kept.
      */
     fun summarize(samples: List<Long>, attempted: Int): LatencyResult {
         val total = attempted.coerceAtLeast(1)
         if (samples.isEmpty()) return LatencyResult(-1, -1, 100, 0, total)
+        val median = ConnectionMath.median(samples)
         return LatencyResult(
-            latency = ConnectionMath.median(samples),
-            jitter = ConnectionMath.jitter(samples),
+            latency = median,
+            jitter = ConnectionMath.jitter(withoutRareSpikes(samples, median)),
             failureRate = (total - samples.size) * 100 / total,
             successfulSamples = samples.size,
             totalSamples = total
         )
     }
+
+    /**
+     * Drops replies far above the median (3x and 50 ms more) when they are at most a quarter
+     * of the samples, keeping the order of the rest.
+     */
+    fun withoutRareSpikes(samples: List<Long>, median: Long): List<Long> {
+        val limit = maxOf(median * 3, median + SPIKE_MARGIN_MS)
+        val spikes = samples.count { it > limit }
+        return if (spikes == 0 || spikes * 4 > samples.size) samples else samples.filter { it <= limit }
+    }
+
+    private const val SPIKE_MARGIN_MS = 50L
 
     /** Usable host addresses of the subnet; wider than /22 falls back to the own /24. */
     fun subnetHosts(selfIp: String, prefix: Int): List<String> {
@@ -421,6 +438,28 @@ object WifiMath {
         val a = range(mine.frequency, mine.widthMhz, mine.centerFrequency)
         val b = range(other.frequency, other.widthMhz, other.centerFrequency)
         return if (a.first < b.last && b.first < a.last) "partial" else "none"
+    }
+
+    /**
+     * Whether [other] is part of the user's own network rather than a neighbour: the same
+     * (non-hidden) name, as with a repeater, mesh node or the router's other band, or a BSSID
+     * from the same radio chip. Routers derive the BSSIDs of their bands and extra SSIDs from one
+     * base address, changing only the last octet, or only the first (locally administered bit).
+     */
+    fun isOwn(mine: WifiNetwork, other: WifiNetwork): Boolean {
+        if (mine.ssid.isNotBlank() && other.ssid == mine.ssid) return true
+        val a = octets(mine.bssid) ?: return false
+        val b = octets(other.bssid) ?: return false
+        if (a == b) return true
+        val middle = (1..4).all { a[it] == b[it] }
+        return middle && (a[0] == b[0] || a[5] == b[5])
+    }
+
+    private fun octets(bssid: String): List<Int>? {
+        val parts = bssid.split(':')
+        if (parts.size != 6) return null
+        val values = parts.map { it.toIntOrNull(16) ?: return null }
+        return values.takeIf { it.any { value -> value != 0 } }
     }
 
     /** 0 at -90 dBm (barely audible) to 1 at -50 dBm (as loud as a nearby router). */

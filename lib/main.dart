@@ -715,37 +715,62 @@ class _HomeState extends State<Home>
         preferredSize: const Size.fromHeight(72),
         child: topBar(),
       ),
-      body: FadeTransition(
-        opacity: curve,
-        child: SlideTransition(
-          position: Tween<Offset>(
-                  begin: Offset(.04 * tabDirection, 0), end: Offset.zero)
-              .animate(curve),
-          // Opaque fill inside the fading layer: pages only paint their cards,
-          // and on some Android GPUs (Impeller/Vulkan) the transparent parts of
-          // the offscreen layer show uncleared memory as static while fading.
-          child: ColoredBox(
-            color: p.bg,
-            // Builders give each page the body context, whose padding holds
-            // the floating tab bar (see _tabPagePadding).
-            child: IndexedStack(
-              index: selectedTab,
-              children: [
-                Builder(builder: monitorPage),
-                Builder(builder: analyticsPage),
-                Builder(builder: historyPage),
-                Builder(
-                  builder: (_) => _DevicesPage(
-                    measurements: measurements,
-                    // Scans only start once the tab is first opened.
-                    visible: selectedTab == 3,
-                    monitoring: enabled,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: FadeTransition(
+              opacity: curve,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                        begin: Offset(.04 * tabDirection, 0), end: Offset.zero)
+                    .animate(curve),
+                // Opaque fill inside the fading layer: pages only paint their cards,
+                // and on some Android GPUs (Impeller/Vulkan) the transparent parts of
+                // the offscreen layer show uncleared memory as static while fading.
+                child: ColoredBox(
+                  color: p.bg,
+                  // Builders give each page the body context, whose padding holds
+                  // the floating tab bar (see _tabPagePadding).
+                  child: IndexedStack(
+                    index: selectedTab,
+                    children: [
+                      Builder(builder: monitorPage),
+                      Builder(builder: analyticsPage),
+                      Builder(builder: historyPage),
+                      Builder(
+                        builder: (_) => _DevicesPage(
+                          measurements: measurements,
+                          // Scans only start once the tab is first opened.
+                          visible: selectedTab == 3,
+                          monitoring: enabled,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-        ),
+          // Soft edge under the top bar, so content scrolling up fades out
+          // instead of being cut mid-line. Painted on top, outside the fade.
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 20,
+            child: IgnorePointer(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [p.bg, p.bg.withValues(alpha: 0)],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: _TabBar(
         key: const ValueKey('tab-bar'),
@@ -756,8 +781,8 @@ class _HomeState extends State<Home>
     );
   }
 
+  // Night mode is switched in Ajustes, leaving the subtitle room to fit.
   Widget topBar() {
-    final appearance = _AppearanceScope.maybeOf(context);
     return SafeArea(
       bottom: false,
       child: Padding(
@@ -815,18 +840,6 @@ class _HomeState extends State<Home>
               pulseKey: lastCheckedAt,
               live: enabled,
             ),
-            if (appearance != null) ...[
-              const SizedBox(width: 8),
-              _TopBarButton(
-                icon: appearance.darkMode
-                    ? Icons.dark_mode_rounded
-                    : Icons.light_mode_rounded,
-                tooltip: appearance.darkMode
-                    ? l.nightModeTurnOff
-                    : l.nightModeTurnOn,
-                onPressed: appearance.toggle,
-              ),
-            ],
             const SizedBox(width: 8),
             _TopBarButton(
               icon: Icons.tune_rounded,

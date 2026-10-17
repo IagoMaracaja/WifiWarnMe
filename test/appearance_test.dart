@@ -78,22 +78,32 @@ void main() {
     await pumpApp(tester);
     final title = find.text('Linkzora');
     expect(paletteOf(tester, title), LinkzoraPalette.dark);
-    expect(find.byTooltip('Desligar modo noturno'), findsOneWidget);
+    // The night mode switch lives in Ajustes, not in the top bar.
+    expect(find.byTooltip('Desligar modo noturno'), findsNothing);
     expect(statusIcons(tester), Brightness.light);
     expect(dialColors(tester), LinkzoraPalette.dark.dial);
   });
 
-  testWidgets('the top bar toggle switches the palette and persists it',
+  testWidgets('the Ajustes switch changes the palette and persists it',
       (tester) async {
     SharedPreferences.setMockInitialValues({'onboardingDone': true});
+    Finder nightSwitch() => find.descendant(
+        of: find.ancestor(
+            of: find.text('Modo noturno'), matching: find.byType(Row)),
+        matching: find.byType(Switch));
+    Future<void> toggleInSettings() async {
+      await tester.tap(find.byTooltip('Ajustes'));
+      await tester.pumpAndSettle();
+      await tester.tap(nightSwitch());
+      await tester.pumpAndSettle();
+    }
+
     await pumpApp(tester);
-    await tester.tap(find.byTooltip('Desligar modo noturno'));
-    await tester.pumpAndSettle();
+    await toggleInSettings();
 
     expect(paletteOf(tester, find.text('Linkzora')), LinkzoraPalette.light);
     expect(scaffoldColor(tester), LinkzoraPalette.light.bg);
     expect(statusIcons(tester), Brightness.dark);
-    expect(find.byTooltip('Ligar modo noturno'), findsOneWidget);
     // The day dial uses the light surfaces, never stark white.
     expect(dialColors(tester), LinkzoraPalette.light.dial);
     expect(dialColors(tester), isNot(contains(Colors.white)));
@@ -105,8 +115,7 @@ void main() {
     await pumpApp(tester);
     expect(paletteOf(tester, find.text('Linkzora')), LinkzoraPalette.light);
 
-    await tester.tap(find.byTooltip('Ligar modo noturno'));
-    await tester.pumpAndSettle();
+    await toggleInSettings();
     expect(paletteOf(tester, find.text('Linkzora')), LinkzoraPalette.dark);
     expect(prefs.getBool('darkMode'), isTrue);
   });

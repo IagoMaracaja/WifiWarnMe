@@ -1081,6 +1081,11 @@ class _WifiPanel extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
+          // The bar measures interference, not signal: label it so it is not
+          // read as the signal strength printed just above.
+          Text(l.interferenceBar,
+              style: TextStyle(color: p.muted, fontSize: 11)),
+          const SizedBox(height: 6),
           _GradientBar(
               value: env.intensity < .03 ? .03 : env.intensity,
               color: levelColor),
@@ -1089,6 +1094,17 @@ class _WifiPanel extends StatelessWidget {
               l.neighborsSummary(
                   env.sameChannel, env.partialOverlap, env.totalNetworks),
               style: TextStyle(color: p.muted, fontSize: 11.5)),
+          if (env.level == 'low' &&
+              env.sameChannel + env.partialOverlap > 0) ...[
+            const SizedBox(height: 4),
+            Text(l.neighborsWeak,
+                style: TextStyle(color: p.muted, fontSize: 11.5)),
+          ],
+          if (env.ownNetworks > 0) ...[
+            const SizedBox(height: 4),
+            Text(l.ownNetworksNote(env.ownNetworks),
+                style: TextStyle(color: p.muted, fontSize: 11.5)),
+          ],
           if (env.suggestedChannel != null) ...[
             const SizedBox(height: 10),
             Text(l.channelTip(env.suggestedChannel!),
@@ -1104,19 +1120,26 @@ class _WifiPanel extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Row(
                   children: [
-                    Icon(Icons.wifi_rounded,
+                    Icon(
+                        network.own
+                            ? Icons.home_rounded
+                            : Icons.wifi_rounded,
                         size: 14,
-                        color: network.overlap == 'none'
-                            ? p.muted
-                            : network.overlap == 'same'
-                                ? p.offline
-                                : p.slow),
+                        color: _neighborColor(network, p)),
                     const SizedBox(width: 8),
                     Expanded(
-                      child: Text(network.ssid,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: p.textSoft, fontSize: 12)),
+                      child: Text.rich(
+                        TextSpan(children: [
+                          TextSpan(text: network.ssid),
+                          if (network.own)
+                            TextSpan(
+                                text: ' · ${l.ownNetworkTag}',
+                                style: TextStyle(color: p.accent)),
+                        ]),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: p.textSoft, fontSize: 12),
+                      ),
                     ),
                     Text(
                         '${l.bandGhz(network.band)} · c${network.channel} · ${network.rssi} dBm',
@@ -1129,6 +1152,15 @@ class _WifiPanel extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Colour of a listed network by how much it actually disturbs yours: a faint
+/// network on the same channel stays grey instead of alarming red.
+Color _neighborColor(WifiNeighbor network, LinkzoraPalette p) {
+  if (network.own) return p.accent;
+  if (network.impact >= .5) return p.offline;
+  if (network.impact >= .2) return p.slow;
+  return p.muted;
 }
 
 /// Panel with an icon, a title and a text. A [collapsible] panel starts

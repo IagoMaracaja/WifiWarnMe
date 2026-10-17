@@ -771,6 +771,17 @@
       }
     }
   },
+  "interferenceBar": "Interferência de redes vizinhas",
+  "ownNetworkTag": "sua rede",
+  "neighborsWeak": "Os vizinhos no seu canal têm sinal fraco e pouco afetam a sua conexão.",
+  "ownNetworksNote": "{count, plural, =1{1 ponto de acesso da sua rede não entra na conta} other{{count} pontos de acesso da sua rede não entram na conta}}",
+  "@ownNetworksNote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "diagNoNetwork": "Sem rede ativa no aparelho",
   "diagCaptivePortal": "Rede exige login (portal cativo)",
   "diagDns": "Falha ao resolver o endereço do servidor (DNS)",
